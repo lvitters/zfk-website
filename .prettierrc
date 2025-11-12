@@ -1,0 +1,10 @@
+{
+	"printWidth": 120,
+	"useTabs": true,
+	"tabWidth": 4,
+	"htmlWhitespaceSensitivity": "ignore",
+	"tailwindPreserveWhitespace": true,
+	"bracketSameLine": true,
+	"svelteBracketNewLine": false,
+	"plugins": ["prettier-plugin-svelte", "prettier-plugin-organize-imports", "prettier-plugin-tailwindcss"]
+}
