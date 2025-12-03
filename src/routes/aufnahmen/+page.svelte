@@ -17,12 +17,6 @@
 	// apply to selectedYear
 	let selectedYear = $state<string>(defaultYear);
 
-	let filteredAudioFiles: Track[] = $state([]);
-
-	$effect(() => {
-		filteredAudioFiles = audioFiles.filter((file) => file.year === selectedYear);
-	});
-
 	function selectYear(year: string) {
 		selectedYear = year;
 	}

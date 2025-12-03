@@ -67,10 +67,12 @@
 			<div class="text-lg leading-relaxed">
 				{#if expandedEventIds.has(event.id)}
 					<div in:fade={{ duration: 200 }}>
+						<!-- eslint-disable-next-line svelte/no-at-html-tags -->
 						{@html event.fullText}
 					</div>
 				{:else}
 					<div in:fade={{ duration: 200 }}>
+						<!-- eslint-disable-next-line svelte/no-at-html-tags -->
 						{@html event.previewText}
 					</div>
 				{/if}

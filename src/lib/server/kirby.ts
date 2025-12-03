@@ -6,7 +6,12 @@ interface KqlResponse<T> {
 	result: T;
 }
 
-export async function kql<T>(queryBody: Record<string, any>, fetcher: typeof fetch): Promise<T | null> {
+interface KqlQueryBody {
+	query: string;
+	select?: Record<string, boolean | string> | boolean; // select can be true or an object with string/boolean values
+}
+
+export async function kql<T>(queryBody: KqlQueryBody, fetcher: typeof fetch): Promise<T | null> {
 	const auth = Buffer.from(`${KIRBY_API_USER}:${KIRBY_API_PASSWORD}`).toString("base64");
 	const url = KIRBY_API_URL;
 

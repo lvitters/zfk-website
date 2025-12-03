@@ -122,7 +122,7 @@
 					<!-- gray overlay for remaining time -->
 
 					<div
-						class="pointer-events-none absolute bottom-0 right-0 top-0 bg-gray-300"
+						class="pointer-events-none absolute top-0 right-0 bottom-0 bg-gray-300"
 						style="width: {100 - (duration ? (currentTime / duration) * 100 : 0)}%">
 					</div>
 				</div>
@@ -130,7 +130,7 @@
 				<!-- interaction area (Hit Box) -->
 
 				<div
-					class="absolute left-0 top-1/2 z-10 h-16 w-full -translate-y-1/2 cursor-pointer"
+					class="absolute top-1/2 left-0 z-10 h-16 w-full -translate-y-1/2 cursor-pointer"
 					role="button"
 					tabindex="0"
 					aria-label="Seek in audio"
@@ -145,7 +145,7 @@
 					<!-- hover indicator (full width, masked via clip-path) -->
 
 					<div
-						class="animate-rainbow pointer-events-none absolute left-0 top-0 h-full w-full bg-[linear-gradient(270deg,#ff0000,#ff7f00,#ffff00,#00ff00,#0000ff,#4b0082,#8f00ff,#ff0000)] bg-[length:400%_400%] opacity-0 ease-linear"
+						class="animate-rainbow pointer-events-none absolute top-0 left-0 h-full w-full bg-[linear-gradient(270deg,#ff0000,#ff7f00,#ffff00,#00ff00,#0000ff,#4b0082,#8f00ff,#ff0000)] bg-[length:400%_400%] opacity-0 ease-linear"
 						bind:this={hoverIndicator}>
 					</div>
 				</div>

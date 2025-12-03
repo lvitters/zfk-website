@@ -7,10 +7,10 @@ const folderPath = "./db/audio";
 // get audio files from the folder
 function getAudioFiles(dir: string): { filePath: string; year: string }[] {
 	const entries = fs.readdirSync(dir, { withFileTypes: true });
-	let files: { filePath: string; year: string }[] = [];
+	const files: { filePath: string; year: string }[] = [];
 
 	for (const entry of entries) {
-		let fullPath = path.join(dir, entry.name);
+		const fullPath = path.join(dir, entry.name);
 
 		// if the entry is a file
 		if (entry.isFile()) {
@@ -44,7 +44,7 @@ async function populateDatabase() {
 		const processedFiles = new Set<string>();
 
 		// for each of the files
-		for (let { filePath, year } of audioFiles) {
+		for (const { filePath, year } of audioFiles) {
 			processedFiles.add(filePath);
 
 			// if it is already present

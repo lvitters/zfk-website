@@ -87,7 +87,7 @@ export const actions = {
 	async setAuthCookie({ request, cookies }) {
 		// get form data and ensure passwordInput is a string
 		const formData = Object.fromEntries(await request.formData()) as { passwordInput: string };
-		let passwordInput = formData.passwordInput;
+		const passwordInput = formData.passwordInput;
 		const ADMIN_HASH = "$2a$12$R6L7AlJypsz2/QSQDGPlD.pmgtHL5//3vCILWsiTkVCbcUvafo/C.";
 
 		try {
