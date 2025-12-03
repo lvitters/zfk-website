@@ -1,30 +1,9 @@
-<div class="mt-4 ml-7 text-xl">
-	<p>
-		Zentrum für Kollektivkultur e.V.
-		<br />
-		Außer der Schleifmühle 31
-		<br />
-		28203 Bremen
-		<br />
-		<br />
-		<b>Steuernummer:</b>
-		60 / 145 / 07505
-		<br />
-		<br />
-		<b>Vertretungsberechtigt:</b>
-		<br />
-		Friedemann Kleemeyer
-		<br />
-		Carl-Friedrich Meinheit
-		<br />
-		Sandra Illguth
-		<br />
-		Sina Müller
-		<br />
-		Robin Eikhof
-		<br />
-		Arne Böckmann
-		<br />
-		Leonard Spillner
-	</p>
+<script lang="ts">
+	let { data } = $props();
+</script>
+
+<div class="mt-4 ml-7 space-y-4 text-xl">
+	{#if data.impressum}
+		{@html data.impressum.text}
+	{/if}
 </div>
