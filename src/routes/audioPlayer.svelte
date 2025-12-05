@@ -190,8 +190,13 @@
 				</div>
 			</div>
 
-			<div class="flex w-12 shrink-0 justify-end pl-2 md:w-auto">
-				<span class="tabular-nums">{formatTime(currentTime)} <span class="hidden md:inline-block">/ {formatTime(duration)}</span></span>
+			<div class="flex w-12 shrink-0 justify-end pl-2" class:md:w-auto={!isOverflowing}>
+				<span class="tabular-nums">
+					{formatTime(currentTime)}
+					{#if !isOverflowing}
+						<span class="hidden md:inline-block">/ {formatTime(duration)}</span>
+					{/if}
+				</span>
 			</div>
 		</div>
 	</div>
