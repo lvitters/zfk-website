@@ -43,7 +43,7 @@
 
 <div class="mt-4 flex w-full flex-col gap-2 pb-24">
 	{#each filteredEvents as event}
-		<div class="flex flex-col gap-2 border-b border-[var(--item-text-color)] bg-[var(--item-bg-color)] text-[var(--item-text-color)] p-4 my-2 rounded-lg" style="box-shadow: var(--box-glow);">
+		<div class="glow-box my-2 flex cursor-pointer flex-col gap-2 rounded-3xl p-4">
 			<!-- date -->
 			<div class="text-xs md:text-sm">{event.displayDate}</div>
 

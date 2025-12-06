@@ -15,7 +15,8 @@ html {
 	--bg-color: #e0e0e0;
 	--text-color: #2a2a2a;
 	--text-glow: 0 0 5px rgba(0, 0, 0, 0.3);
-	--box-glow: 0 0 5px rgba(0, 0, 0, 0.3);
+	--box-glow: 0 0 15px rgba(0, 0, 0, 0.2);
+	--box-glow-hover: 0 0 20px rgba(0, 0, 0, 0.4);
 	--item-bg-color: var(--text-color);
 	--item-text-color: var(--bg-color);
 }
@@ -24,7 +25,8 @@ html {
 	--bg-color: #2a2a2a;
 	--text-color: #e0e0e0;
 	--text-glow: 0 0 5px rgba(255, 255, 255, 0.5);
-	--box-glow: 0 0 5px rgba(255, 255, 255, 0.5);
+	--box-glow: 0 0 15px rgba(255, 255, 255, 0.5);
+	--box-glow-hover: 0 0 20px rgba(255, 255, 255, 0.7);
 	--item-bg-color: var(--text-color);
 	--item-text-color: var(--bg-color);
 }
@@ -74,13 +76,23 @@ body {
 	}
 }
 
-.animate-scroll-back-forth { /* Correctly placed outside @theme */
+.animate-scroll-back-forth {
+	/* Correctly placed outside @theme */
 	animation: scroll-back-forth 10s ease-in-out infinite;
 }
 
 @layer components {
+	.glow-box {
+		box-shadow: inset var(--box-glow);
+		transition: box-shadow 0.3s ease;
+	}
+
+	.glow-box:hover {
+		box-shadow: inset var(--box-glow-hover);
+	}
+
 	.kirby-content h1 {
-		@apply mt-0 mb-4 text-lg font-bold md:mt-0 md:text-2xl;
+		@apply mt-4 mb-4 text-lg font-bold md:mt-4 md:text-2xl;
 	}
 
 	.kirby-content h2 {

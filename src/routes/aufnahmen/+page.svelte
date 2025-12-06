@@ -36,9 +36,8 @@
 		{#if file.year == selectedYear}
 			<!-- file row -->
 			<button
-				class="my-2 flex cursor-pointer flex-col rounded-lg bg-[var(--item-bg-color)] p-4 text-left text-[var(--item-text-color)] transition-colors duration-300 hover:bg-[var(--bg-color)] hover:text-[var(--text-color)]"
-				onclick={() => selectTrack(file)}
-				style="box-shadow: var(--box-glow);">
+				class="glow-box my-2 flex cursor-pointer flex-col rounded-3xl p-4 text-left"
+				onclick={() => selectTrack(file)}>
 				<!-- date -->
 				<div class="flex items-center pr-4 text-xs md:text-sm">
 					{file.sortDate.split("-")[2]}.{file.sortDate.split("-")[1]}
