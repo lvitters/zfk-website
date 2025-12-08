@@ -6,10 +6,13 @@ interface Event {
 	title: string;
 	date: string;
 	time: string;
-	description: string;
+	endDate: string;
+	text: string;
 	formattedDate: string;
+	formattedEndDate: string;
 	url: string;
 	id: string;
+	thumbnailUrl?: string;
 }
 
 export const load: PageServerLoad = async ({ fetch }) => {
@@ -21,10 +24,13 @@ export const load: PageServerLoad = async ({ fetch }) => {
 				title: true,
 				date: true,
 				time: true,
-				description: true,
+				endDate: true,
+				text: "page.text.toBlocks.toHtml",
 				formattedDate: "page.date.toDate('d.m')",
+				formattedEndDate: "page.endDate.toDate('d.m')",
 				url: true,
 				id: "page.id",
+				thumbnailUrl: "page.text.toBlocks.filterBy('type', 'image').first.content.image.toFiles.first.url ?? page.images.first.url" // Prioritize image from content blocks, fallback to first file
 			},
 		},
 		fetch,

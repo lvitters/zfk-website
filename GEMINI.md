@@ -3,8 +3,6 @@
 This is the folder containting the SvelteKit application for the website frontend.
 
 **Frontend:** Svelte 5, SvelteKit, Tailwind CSS
-**Backend:** Node.js
-**Database:** SQLite with Drizzle ORM
 
 **Always** start code comments with lower case letters, unless the respective word is always capitalized.
 

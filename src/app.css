@@ -132,11 +132,15 @@ body {
 	}
 
 	.kirby-content h1 {
-		@apply mt-4 mb-4 text-lg font-bold md:mt-4 md:text-2xl;
+		@apply mt-8 mb-6 text-lg font-bold md:mt-4 md:text-2xl;
 	}
 
 	.kirby-content h2 {
-		@apply mt-4 mb-4 text-base font-bold md:text-xl;
+		@apply mt-6 mb-4 text-base font-bold md:text-xl;
+	}
+
+	.kirby-content h3 {
+		@apply mt-4 mb-2 text-base italic md:text-lg;
 	}
 
 	.kirby-content p {
@@ -148,7 +152,7 @@ body {
 	}
 
 	.kirby-content figure ul {
-		@apply grid grid-cols-2 gap-4 md:grid-cols-3;
+		@apply my-5 grid grid-cols-2 gap-4 md:grid-cols-3;
 	}
 
 	.kirby-content figure ul li {
@@ -174,6 +178,10 @@ body {
 
 	.kirby-content figure ul li figure figcaption {
 		@apply text-sm text-gray-600; /* basic caption style */
+	}
+
+	.kirby-content a {
+		@apply underline break-all hover:opacity-80;
 	}
 }
 
