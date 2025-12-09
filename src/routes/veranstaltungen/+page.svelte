@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { fade, slide } from "svelte/transition";
 	import YearSelect from "../yearSelect.svelte";
 	import "$lib/css/fonts.css";
 
@@ -88,7 +87,7 @@
 		<div class="w-full" use:addRef={event.id}>
 			{#if expandedEventId === event.id}
 				<!-- Expanded View -->
-				<div class="flex w-full flex-col gap-3 rounded-3xl bg-black/5 dark:bg-white/5 p-6" transition:fade={{ duration: 200 }}>
+				<div class="flex w-full flex-col gap-3 rounded-3xl bg-black/5 dark:bg-white/5 p-6">
 					<div class="flex items-center justify-between pb-4">
 						<h2 class="text-2xl font-medium md:text-3xl cursor-pointer">{event.title}</h2>
 						<button

@@ -60,7 +60,6 @@
 	}
 
 	import { getNavBottom } from "$lib/layoutState.svelte";
-	import { slide } from "svelte/transition";
 	let navBottom = $derived(getNavBottom());
 
 	let { isOpen = $bindable(true), topSectionHeight = $bindable(), bottomSectionHeight = $bindable() } = $props();
@@ -90,7 +89,7 @@
 						? 'invert(1)'
 						: ''} var(--image-glow-filter);" />
 				<div
-					class="absolute -bottom-1 -left-5 flex h-6 w-6 cursor-pointer items-center justify-center rounded-full transition-transform hover:scale-110 active:scale-95 md:-bottom-1 md:-left-6 md:h-8 md:w-8">
+					class="absolute -bottom-1 -left-5 flex h-6 w-6 cursor-pointer items-center justify-center rounded-full md:-bottom-1 md:-left-6 md:h-8 md:w-8">
 					<img
 						src="/playpause.png"
 						alt="Play/Pause"
@@ -137,7 +136,7 @@
 				<!-- theme toggle -->
 				<button
 					onclick={toggleTheme}
-					class="cursor-pointer text-sm transition-transform hover:scale-110 md:text-2xl"
+					class="cursor-pointer text-sm md:text-2xl"
 					aria-label="Toggle Dark Mode">
 					{#if isDark}☀︎{:else}☾{/if}
 				</button>
@@ -153,7 +152,7 @@
 						viewBox="0 0 24 24"
 						stroke-width="2"
 						stroke="currentColor"
-						class="h-4 w-4 transition-transform duration-500 {isOpen ? 'rotate-180' : 'rotate-0'}">
+						class="h-4 w-4 {isOpen ? 'rotate-180' : 'rotate-0'}">
 						<path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
 					</svg>
 				</button>
@@ -161,7 +160,7 @@
 		</div>
 
 		{#if navBottom}
-			<div transition:slide={{ duration: 500 }} class="mt-4 pb-4 pr-0 pt-0">
+			<div class="mt-4 pb-4 pr-0 pt-0">
 				{@render navBottom()}
 			</div>
 		{/if}
