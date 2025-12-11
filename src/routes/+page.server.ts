@@ -70,6 +70,7 @@ export const load: PageServerLoad = async ({ fetch }) => {
         kql(clubQuery, fetch),
         kql(infoQuery, fetch)
     ]);
+    console.log("Audio Result:", audioResult);
 
     // Process Events
     const events = ((eventsResult as any[]) || []).map((event: any) => {

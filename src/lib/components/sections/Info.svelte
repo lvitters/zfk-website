@@ -13,7 +13,7 @@
 	{#each infoPages as page}
 		<div class="border-b-2 border-[var(--text-color)] last:border-b-0">
 			<button
-				class="flex w-full items-center justify-between px-2 py-4 text-left text-2xl font-medium focus:outline-none md:px-12 md:text-3xl lg:px-16 lg:text-4xl {expandedId ===
+				class="flex w-full items-center justify-between p-4 text-left text-2xl font-medium focus:outline-none md:text-3xl lg:text-4xl {expandedId ===
 				page.id
 					? 'bg-[var(--text-color)] text-[var(--bg-color)]'
 					: 'hover:bg-[var(--text-color)] hover:text-[var(--bg-color)]'}"
@@ -22,7 +22,7 @@
 			</button>
 			{#if expandedId === page.id}
 				<div
-					class="kirby-content border-t-2 border-solid border-[var(--text-color)] p-4 text-base leading-relaxed lg:px-16">
+					class="kirby-content border-t-2 border-solid border-[var(--text-color)] p-4 text-base leading-relaxed">
 					<!-- eslint-disable-next-line svelte/no-at-html-tags -->
 					{@html page.text}
 				</div>

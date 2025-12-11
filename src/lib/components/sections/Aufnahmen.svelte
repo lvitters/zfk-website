@@ -6,18 +6,18 @@
 	import { getNavHeight } from "$lib/layoutState.svelte";
 	import { onMount } from "svelte";
 
-	let { audioFiles, selectedYear = $bindable() }: { audioFiles: Track[], selectedYear?: string } = $props();
+	let { audioFiles, selectedYear = $bindable() }: { audioFiles: Track[]; selectedYear?: string } = $props();
 
 	// extract unique years and sort them in descending order
 	const years = Array.from(new Set(audioFiles.map((file) => file.year))).sort((a, b) => Number(b) - Number(a));
 
-    $effect(() => {
-        if (!selectedYear && years.length > 0) {
-            selectedYear = years[0];
-        }
-    });
+	$effect(() => {
+		if (!selectedYear && years.length > 0) {
+			selectedYear = years[0];
+		}
+	});
 
-    let filteredAudioFiles = $derived(audioFiles.filter((file: any) => file.year === selectedYear));
+	let filteredAudioFiles = $derived(audioFiles.filter((file: any) => file.year === selectedYear));
 
 	// eventRefs and addRef for scrolling
 	let eventRefs = new Map<string, HTMLElement>();
@@ -52,8 +52,8 @@
 	}
 
 	function selectYear(year: string) {
-		selectedYear = year; 
-        // No scrolling needed
+		selectedYear = year;
+		// No scrolling needed
 	}
 
 	function selectTrack(track: Track) {
@@ -61,21 +61,6 @@
 	}
 
 	let bottomPadding = $state(128);
-
-	let trackClasses = $derived((file: Track) => {
-		let baseClasses = "flex cursor-pointer flex-col p-4 text-left mb-4 relative duration-100";
-		let borderStyle = "border-2 border-black"; // Common border properties
-
-		const isSelected = file.id === $currentTrack?.id;
-
-		if (isSelected) {
-			borderStyle += " border-dotted"; // Selected is always dotted
-		} else {
-			borderStyle += " border-solid hover:border-dotted"; // Not selected, default solid, dotted on hover
-		}
-
-		return `${baseClasses} ${borderStyle}`;
-	});
 
 	onMount(() => {
 		const updatePadding = () => {
@@ -97,19 +82,22 @@
 
 <!-- display files -->
 <div class="flex w-full flex-col bg-[var(--bg-color)]">
-    <!-- Year Select -->
-    <div class="w-full border-b-2 border-[var(--text-color)] p-4 lg:px-16">
-	    <YearSelect {years} year={selectedYear} {selectYear} />
-    </div>
+	<!-- Year Select -->
+	<div class="w-full border-b-2 border-[var(--text-color)] p-4">
+		<YearSelect {years} year={selectedYear} {selectYear} />
+	</div>
 
 	{#each filteredAudioFiles as file, index}
 		<!-- file row -->
-		<button 
-            class="flex cursor-pointer flex-col gap-1 p-4 lg:px-16 text-left w-full relative duration-100 border-b-2 border-[var(--text-color)] last:border-b-0 {file.id === $currentTrack?.id ? 'bg-[var(--text-color)] text-[var(--bg-color)]' : 'hover:bg-[var(--text-color)] hover:text-[var(--bg-color)]'}" 
-            onclick={() => selectTrack(file)} 
-            use:addRef={file.id}>
+		<button
+			class="relative flex w-full cursor-pointer flex-col gap-1 border-b-2 border-[var(--text-color)] p-4 text-left duration-100 last:border-b-0 {file.id ===
+			$currentTrack?.id
+				? 'bg-[var(--text-color)] text-[var(--bg-color)]'
+				: 'hover:bg-[var(--text-color)] hover:text-[var(--bg-color)]'}"
+			onclick={() => selectTrack(file)}
+			use:addRef={file.id}>
 			<!-- date -->
-			<div class="opacity-70 shrink-0 text-sm">
+			<div class="shrink-0 text-sm opacity-70">
 				{file.sortDate.split("-")[2]}.{file.sortDate.split("-")[1]}.
 			</div>
 			<!-- title -->

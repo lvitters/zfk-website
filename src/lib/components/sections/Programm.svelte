@@ -112,7 +112,7 @@
 	<!-- preview row -->
 	<div class="flex w-full justify-start">
 		<button
-			class="relative flex w-full flex-col overflow-hidden text-left focus:outline-none cursor-pointer duration-100 p-4 lg:px-16 {expandedEventId === event.id ? 'bg-[var(--text-color)] text-[var(--bg-color)]' : 'hover:bg-[var(--text-color)] hover:text-[var(--bg-color)]'} {imageButtonClasses(expandedEventId === event.id, rowHovered)}"
+			class="relative flex w-full flex-col overflow-hidden text-left focus:outline-none cursor-pointer duration-100 p-4 {expandedEventId === event.id ? 'bg-[var(--text-color)] text-[var(--bg-color)]' : 'hover:bg-[var(--text-color)] hover:text-[var(--bg-color)]'}"
 			onclick={() => toggleEvent(event.id)}
 			onmouseenter={() => (isEntryHovered[index] = true)}
 			onmouseleave={() => (isEntryHovered[index] = false)}>
@@ -195,7 +195,7 @@
 
 <div class="flex w-full flex-col bg-[var(--bg-color)]">
 	<!-- Year Select Row -->
-	<div class="w-full border-b-2 border-[var(--text-color)] p-4 lg:px-16">
+	<div class="w-full border-b-2 border-[var(--text-color)] p-4">
 		<YearSelect {years} year={selectedYear} {selectYear} />
 	</div>
 
