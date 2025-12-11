@@ -151,7 +151,9 @@
 				xmlns="http://www.w3.org/2000/svg"
 				viewBox="0 0 384 384"
 				class="animate-spin-vinyl h-full w-full text-[var(--text-color)]"
-				style="animation-play-state: {$isPlaying ? 'running' : 'paused'}; fill: currentColor; filter: drop-shadow(0 0 2px var(--text-color));">
+				style="animation-play-state: {$isPlaying
+					? 'running'
+					: 'paused'}; fill: currentColor; filter: drop-shadow(0 0 2px var(--text-color));">
 				<path
 					d="M247.73,272.38l53.76-56.76h36.76l-71.95,71.78,49.69,51.19c41.6-35.22,68.02-87.82,68.02-146.59s-28.17-114.8-72.14-149.99l-18.99,4.04c-12.07,1.98-16.48,7.34-16.48,17.67v125.99h-26.57v-100.12h-17.96v-16.47l17.96-5.67c.02-30.16,8.15-39.31,31.8-45.28C254.86,8.02,224.37,0,192,0c-38.11,0-73.62,11.1-103.49,30.25h47.4l-19.76,22.31h-56.12C23.06,87.55,0,137.08,0,192c0,50.86,19.78,97.09,52.06,131.44v-107.82h26.99v131.64c31.7,23.1,70.73,36.74,112.95,36.74,38.1,0,73.6-11.1,103.46-30.23l-47.8-50.49.06-30.9ZM297.63,68.06h26.31v22.14h-26.31v-22.14ZM192.46,189.72h-125.81v-20.7L172.33,37.48l16.69-.19v19.02l-89.24,109.25v1.84h92.69v22.31Z" />
 			</svg>
@@ -161,7 +163,7 @@
 	{#if $currentTrack}
 		<!-- Row 2: Progress + Info (Merged) -->
 		<div
-			class="relative w-full cursor-none overflow-hidden border-b-2 border-[var(--text-color)] bg-[var(--bg-color)] p-4 lg:px-16"
+			class="relative w-full cursor-none overflow-hidden border-b-2 border-[var(--text-color)] bg-[var(--bg-color)] px-2 py-4 md:px-12 lg:px-16"
 			bind:this={progressBar}
 			role="button"
 			tabindex="0"
@@ -190,15 +192,15 @@
 				</div>
 			</div>
 
-            <!-- Progress Bar (Gradient from Bottom) -->
-            <div
-                class="absolute bottom-0 left-0 h-[12px] pointer-events-none z-10 overflow-hidden"
-                style="width: {duration ? (currentTime / duration) * 100 : 0}%; transition: width 0.1s linear;">
-                <div
-                    class="h-full w-screen"
-                    style="background-image: linear-gradient(270deg, #ff00ff, #ffc000, #ccff00, #00ffff, #0080ff, #8000ff, #ff00ff); background-size: 100% 100%; animation: var(--animate-rainbow); mask-image: linear-gradient(to top, black, transparent); -webkit-mask-image: linear-gradient(to top, black, transparent);">
-                </div>
-            </div>
+			<!-- Progress Bar (Gradient from Bottom) -->
+			<div
+				class="pointer-events-none absolute bottom-0 left-0 z-10 h-[12px] overflow-hidden"
+				style="width: {duration ? (currentTime / duration) * 100 : 0}%; transition: width 0.1s linear;">
+				<div
+					class="h-full w-screen"
+					style="background-image: linear-gradient(270deg, #ff00ff, #ffc000, #ccff00, #00ffff, #0080ff, #8000ff, #ff00ff); background-size: 100% 100%; animation: var(--animate-rainbow); mask-image: linear-gradient(to top, black, transparent); -webkit-mask-image: linear-gradient(to top, black, transparent);">
+				</div>
+			</div>
 		</div>
 	{/if}
 </div>

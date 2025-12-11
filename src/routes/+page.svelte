@@ -11,8 +11,8 @@
 	let { events, audioFiles, clubPage, infoPages } = data;
 
 	let expandedSection = $state(null as string | null);
-    let programmYear = $state<number | undefined>();
-    let aufnahmenYear = $state<string | undefined>();
+	let programmYear = $state<number | undefined>();
+	let aufnahmenYear = $state<string | undefined>();
 
 	function toggleSection(section: string) {
 		if (expandedSection === section) {
@@ -23,7 +23,7 @@
 	}
 </script>
 
-<div class="flex min-h-screen w-full flex-col">
+<div class="flex min-h-screen w-full flex-col px-4 md:px-6 lg:px-8">
 	<!-- Row 1 & 2: Player (Logo + Controls) -->
 	<div class="sticky top-0 z-50 w-full bg-[var(--bg-color)]">
 		<AudioPlayer {audioFiles} />
@@ -32,7 +32,7 @@
 	<!-- Row 3: programm -->
 	<div class="group relative w-full border-b-2 border-[var(--text-color)]">
 		<button
-			class="relative z-20 flex w-full cursor-pointer items-center justify-between p-6 text-left text-3xl font-bold uppercase transition-colors duration-300 md:p-8 md:text-5xl lg:px-16 {expandedSection ===
+			class="relative z-20 flex w-full cursor-pointer items-center justify-between px-2 py-2 text-left text-4xl font-bold uppercase transition-colors duration-300 md:text-8xl lg:text-9xl {expandedSection ===
 			'programm'
 				? 'bg-[var(--text-color)] text-[var(--bg-color)]'
 				: 'bg-[var(--bg-color)] hover:bg-[var(--text-color)] hover:text-[var(--bg-color)]'}"
@@ -41,16 +41,15 @@
 		</button>
 
 		{#if expandedSection === "programm"}
-			<div class="relative z-20 border-t-2 border-[var(--text-color)] bg-[var(--bg-color)]" transition:slide>
+			<div class="border-t-2 border-[var(--text-color)] bg-[var(--bg-color)]" transition:slide>
 				<Programm {events} bind:selectedYear={programmYear} />
 			</div>
 		{/if}
 	</div>
 
-	<!-- Row 4: Aufnahmen -->
 	<div class="relative w-full border-b-2 border-[var(--text-color)]">
 		<button
-			class="flex w-full cursor-pointer items-center justify-between p-6 text-left text-3xl font-bold uppercase transition-colors md:p-8 md:text-5xl lg:px-16 {expandedSection ===
+			class="relative z-20 flex w-full cursor-pointer items-center justify-between px-2 py-2 text-left text-4xl font-bold uppercase transition-colors duration-300 md:text-8xl lg:text-9xl {expandedSection ===
 			'aufnahmen'
 				? 'bg-[var(--text-color)] text-[var(--bg-color)]'
 				: 'bg-[var(--bg-color)] hover:bg-[var(--text-color)] hover:text-[var(--bg-color)]'}"
@@ -67,7 +66,7 @@
 	<!-- Row 5: Club -->
 	<div class="relative w-full border-b-2 border-[var(--text-color)]">
 		<button
-			class="flex w-full cursor-pointer items-center justify-between p-6 text-left text-3xl font-bold uppercase transition-colors md:p-8 md:text-5xl lg:px-16 {expandedSection ===
+			class="relative z-20 flex w-full cursor-pointer items-center justify-between px-2 py-2 text-left text-4xl font-bold uppercase transition-colors duration-300 md:text-8xl lg:text-9xl {expandedSection ===
 			'club'
 				? 'bg-[var(--text-color)] text-[var(--bg-color)]'
 				: 'bg-[var(--bg-color)] hover:bg-[var(--text-color)] hover:text-[var(--bg-color)]'}"
@@ -84,7 +83,7 @@
 	<!-- Row 6: Info -->
 	<div class="relative w-full border-b-2 border-[var(--text-color)]">
 		<button
-			class="flex w-full cursor-pointer items-center justify-between p-6 text-left text-3xl font-bold uppercase transition-colors md:p-8 md:text-5xl lg:px-16 {expandedSection ===
+			class="relative z-20 flex w-full cursor-pointer items-center justify-between px-2 py-2 text-left text-4xl font-bold uppercase transition-colors duration-300 md:text-8xl lg:text-9xl {expandedSection ===
 			'info'
 				? 'bg-[var(--text-color)] text-[var(--bg-color)]'
 				: 'bg-[var(--bg-color)] hover:bg-[var(--text-color)] hover:text-[var(--bg-color)]'}"
