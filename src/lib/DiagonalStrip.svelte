@@ -7,8 +7,11 @@
 	let container: HTMLDivElement;
     let isLoaded = $state(false);
 
-	onMount(() => {
-		if (!src) return;
+	$effect(() => {
+		if (!src || !canvas) return;
+
+        // Reset loaded state when src changes
+        isLoaded = false;
 
 		const img = new Image();
 		img.crossOrigin = "Anonymous";

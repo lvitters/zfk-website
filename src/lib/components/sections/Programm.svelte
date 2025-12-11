@@ -4,7 +4,7 @@
 	import { onMount } from "svelte";
 	import DiagonalStrip from "$lib/DiagonalStrip.svelte";
 
-	let { events: rawEvents } = $props();
+	let { events: rawEvents, selectedYear = $bindable() } = $props();
 
 	// calculate events once
 	const events = (rawEvents || []).map((e: any) => {
@@ -31,7 +31,11 @@
 		(a: any, b: any) => Number(b) - Number(a),
 	);
 
-	let selectedYear = $state<number>(years[0] as number);
+    $effect(() => {
+        if (!selectedYear && years.length > 0) {
+            selectedYear = years[0] as number;
+        }
+    });
 
 	let filteredEvents = $derived(events.filter((e: any) => e.year === selectedYear));
 
@@ -83,14 +87,7 @@
 			expandedEventId = null;
 		} else {
 			expandedEventId = id;
-			setTimeout(() => {
-				if (expandedEventId && eventRefs.has(expandedEventId)) {
-					const el = eventRefs.get(expandedEventId);
-					if (el) {
-						scrollToElement(el);
-					}
-				}
-			}, 250);
+            // Removed setTimeout and scrollToElement call
 		}
 	}
 
@@ -115,13 +112,13 @@
 	<!-- preview row -->
 	<div class="flex w-full justify-start">
 		<button
-			class="relative flex w-full flex-col overflow-hidden text-left focus:outline-none cursor-pointer duration-100 p-4 lg:px-16 hover:bg-gray-700 hover:text-white {imageButtonClasses(expandedEventId === event.id, rowHovered)}"
+			class="relative flex w-full flex-col overflow-hidden text-left focus:outline-none cursor-pointer duration-100 p-4 lg:px-16 {expandedEventId === event.id ? 'bg-[var(--text-color)] text-[var(--bg-color)]' : 'hover:bg-[var(--text-color)] hover:text-[var(--bg-color)]'} {imageButtonClasses(expandedEventId === event.id, rowHovered)}"
 			onclick={() => toggleEvent(event.id)}
 			onmouseenter={() => (isEntryHovered[index] = true)}
 			onmouseleave={() => (isEntryHovered[index] = false)}>
 			
 			<!-- Content Overlay (now just regular content) -->
-			<div class="flex w-full flex-row items-baseline gap-4">
+			<div class="flex w-full flex-col gap-1">
 				<div class="shrink-0 opacity-70">
 					<span class="text-sm">
 						{event.displayDate}
@@ -140,7 +137,9 @@
 			</div>
 
 			<!-- Diagonal Pixel Row as Bottom Border -->
-			<div class="absolute bottom-0 left-0 right-0 h-[4px] overflow-hidden">
+			<div 
+                class="absolute bottom-0 left-0 right-0 h-[12px] overflow-hidden"
+                style="mask-image: linear-gradient(to top, black, transparent); -webkit-mask-image: linear-gradient(to top, black, transparent);">
 				{#if event.thumbnailUrl}
 					<DiagonalStrip src={event.thumbnailUrl} alt="" class="h-full w-full object-fill" />
 				{/if}
@@ -174,24 +173,8 @@
 		return tempDiv.innerHTML;
 	}}
 	<div class="expanded-event-container flex w-full flex-col items-center gap-6 p-4">
-		<!-- Close button -->
-		<button
-			onclick={closeEvent}
-			class="flex h-10 w-10 cursor-pointer items-center justify-center self-end rounded-full"
-			aria-label="Close details">
-			<svg
-				xmlns="http://www.w3.org/2000/svg"
-				fill="none"
-				viewBox="0 0 24 24"
-				stroke-width="1.5"
-				stroke="currentColor"
-				class="h-6 w-6 transition-transform hover:scale-110">
-				<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-			</svg>
-		</button>
-
-		<!-- Image Container (w-2/3 within the w-full parent) -->
-		<div class="mx-auto w-2/3">
+		<!-- Image Container (w-64 left aligned) -->
+		<div class="w-64 self-start">
 			{#if event.thumbnailUrl}
 				<img src={event.thumbnailUrl} alt={event.title} class="h-auto w-full object-contain" />
 			{:else if event.videoUrl}
@@ -202,13 +185,8 @@
 			{/if}
 		</div>
 
-		<!-- Title -->
-		<h2 class="mt-4 text-center text-2xl font-medium md:text-3xl">
-			{event.title}
-		</h2>
-
 		<!-- Event Text -->
-		<div class="kirby-content w-full border-t-2 border-solid border-black text-base leading-relaxed md:text-lg">
+		<div class="kirby-content w-full border-t-2 border-solid border-[var(--text-color)] text-base leading-relaxed md:text-lg">
 			<!-- eslint-disable-next-line svelte/no-at-html-tags -->
 			{@html getFilteredFullText(event.fullText)}
 		</div>
@@ -217,16 +195,15 @@
 
 <div class="flex w-full flex-col bg-[var(--bg-color)]">
 	<!-- Year Select Row -->
-	<div class="w-full border-b-2 border-black p-4 lg:px-16">
+	<div class="w-full border-b-2 border-[var(--text-color)] p-4 lg:px-16">
 		<YearSelect {years} year={selectedYear} {selectYear} />
 	</div>
 
 	{#each filteredEvents as event, index}
-		<div class="event-row w-full border-b-2 border-black transition-colors last:border-b-0" use:addRef={event.id}>
+		<div class="event-row w-full border-b-2 border-[var(--text-color)] transition-colors last:border-b-0" use:addRef={event.id}>
+			{@render previewRow(event, index, expandedEventId === event.id, isEntryHovered[index])}
 			{#if expandedEventId === event.id}
 				{@render expandedEventContent(event)}
-			{:else}
-				{@render previewRow(event, index, false, isEntryHovered[index])}
 			{/if}
 		</div>
 	{/each}

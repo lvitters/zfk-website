@@ -6,13 +6,16 @@
 	import { getNavHeight } from "$lib/layoutState.svelte";
 	import { onMount } from "svelte";
 
-	let { audioFiles }: { audioFiles: Track[] } = $props();
+	let { audioFiles, selectedYear = $bindable() }: { audioFiles: Track[], selectedYear?: string } = $props();
 
 	// extract unique years and sort them in descending order
 	const years = Array.from(new Set(audioFiles.map((file) => file.year))).sort((a, b) => Number(b) - Number(a));
 
-	// apply to selectedYear
-	let selectedYear = $state<string>(years[0]);
+    $effect(() => {
+        if (!selectedYear && years.length > 0) {
+            selectedYear = years[0];
+        }
+    });
 
     let filteredAudioFiles = $derived(audioFiles.filter((file: any) => file.year === selectedYear));
 
@@ -95,14 +98,14 @@
 <!-- display files -->
 <div class="flex w-full flex-col bg-[var(--bg-color)]">
     <!-- Year Select -->
-    <div class="w-full border-b-2 border-black p-4 lg:px-16">
+    <div class="w-full border-b-2 border-[var(--text-color)] p-4 lg:px-16">
 	    <YearSelect {years} year={selectedYear} {selectYear} />
     </div>
 
 	{#each filteredAudioFiles as file, index}
 		<!-- file row -->
 		<button 
-            class="flex cursor-pointer flex-row items-baseline gap-4 p-4 lg:px-16 text-left w-full relative duration-100 border-b-2 border-black last:border-b-0 {file.id === $currentTrack?.id ? 'bg-gray-700 text-white' : 'hover:bg-gray-700 hover:text-white'}" 
+            class="flex cursor-pointer flex-col gap-1 p-4 lg:px-16 text-left w-full relative duration-100 border-b-2 border-[var(--text-color)] last:border-b-0 {file.id === $currentTrack?.id ? 'bg-[var(--text-color)] text-[var(--bg-color)]' : 'hover:bg-[var(--text-color)] hover:text-[var(--bg-color)]'}" 
             onclick={() => selectTrack(file)} 
             use:addRef={file.id}>
 			<!-- date -->

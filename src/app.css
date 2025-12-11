@@ -15,12 +15,10 @@
 }
 
 :root {
-	--bg-color: #f8f8f8;
-	--text-color: #374151;
-	--text-glow: 0 0 5px rgba(0, 0, 0, 0.3);
-	--image-glow-filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.3));
-	--box-glow: 0 0 15px rgba(0, 0, 0, 0.2);
-	--box-glow-hover: 0 0 20px rgba(0, 0, 0, 0.4);
+	--bg-color: #082e33;
+	--text-color: #ffffff;
+	--text-glow: 0 0 4px var(--text-color);
+	/* green: #082e33 petrol: #374151 */
 	--item-bg-color: var(--text-color);
 	--item-text-color: var(--bg-color);
 }
@@ -33,6 +31,13 @@ body {
 	transition:
 		background-color 0.3s,
 		color 0.3s;
+}
+
+button,
+input,
+select,
+textarea {
+	text-shadow: inherit;
 }
 
 @theme {
