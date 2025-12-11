@@ -8,7 +8,7 @@ interface KqlResponse<T> {
 
 interface KqlQueryBody {
 	query: string;
-	select?: Record<string, boolean | string> | boolean; // select can be true or an object with string/boolean values
+	select?: Record<string, any> | boolean;
 }
 
 export async function kql<T>(queryBody: KqlQueryBody, fetcher: typeof fetch): Promise<T | null> {

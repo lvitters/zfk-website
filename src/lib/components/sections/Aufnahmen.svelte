@@ -1,18 +1,20 @@
 <script lang="ts">
-	import YearSelect from "../yearSelect.svelte";
+	import YearSelect from "$lib/components/yearSelect.svelte";
 	import "$lib/css/fonts.css";
 	import { currentTrack } from "$lib/playerStore";
 	import type { Track } from "$lib/types";
 	import { getNavHeight } from "$lib/layoutState.svelte";
+	import { onMount } from "svelte";
 
-	let { data }: { data: { audioFiles: Track[] } } = $props();
-	const { audioFiles } = data;
+	let { audioFiles }: { audioFiles: Track[] } = $props();
 
 	// extract unique years and sort them in descending order
 	const years = Array.from(new Set(audioFiles.map((file) => file.year))).sort((a, b) => Number(b) - Number(a));
 
 	// apply to selectedYear
 	let selectedYear = $state<string>(years[0]);
+
+    let filteredAudioFiles = $derived(audioFiles.filter((file: any) => file.year === selectedYear));
 
 	// eventRefs and addRef for scrolling
 	let eventRefs = new Map<string, HTMLElement>();
@@ -41,34 +43,23 @@
 			container.scrollTo({ top: targetScroll, behavior: "smooth" });
 		} else {
 			// Mobile scrolling via window
-			const navHeight = getNavHeight();
-			const y = el.getBoundingClientRect().top + window.scrollY - navHeight - scrollOffset;
+			const y = el.getBoundingClientRect().top + window.scrollY - scrollOffset - 100;
 			window.scrollTo({ top: y, behavior: "smooth" });
 		}
 	}
 
 	function selectYear(year: string) {
-		selectedYear = year; // keep selectedYear updated for styling in YearSelect
-		// find the first audio file for the selected year
-		const firstFileOfYear = audioFiles.find((file) => file.year === year);
-		if (firstFileOfYear) {
-			const el = eventRefs.get(firstFileOfYear.id);
-			if (el) {
-				scrollToElement(el);
-			}
-		}
+		selectedYear = year; 
+        // No scrolling needed
 	}
 
 	function selectTrack(track: Track) {
 		currentTrack.set(track);
 	}
 
-	import NavBottomPortal from "$lib/NavBottomPortal.svelte";
-	import { onMount } from "svelte";
-
 	let bottomPadding = $state(128);
 
-	let trackClasses = $derived((file) => {
+	let trackClasses = $derived((file: Track) => {
 		let baseClasses = "flex cursor-pointer flex-col p-4 text-left mb-4 relative duration-100";
 		let borderStyle = "border-2 border-black"; // Common border properties
 
@@ -101,21 +92,25 @@
 	});
 </script>
 
-<NavBottomPortal>
-	<YearSelect {years} year={selectedYear} {selectYear} />
-</NavBottomPortal>
-
 <!-- display files -->
-<div class="flex w-full flex-col" style="padding-bottom: {bottomPadding}px;">
-	{#each audioFiles as file, index}
+<div class="flex w-full flex-col bg-[var(--bg-color)]">
+    <!-- Year Select -->
+    <div class="w-full border-b-2 border-black p-4 lg:px-16">
+	    <YearSelect {years} year={selectedYear} {selectYear} />
+    </div>
+
+	{#each filteredAudioFiles as file, index}
 		<!-- file row -->
-		<button class={trackClasses(file)} onclick={() => selectTrack(file)} use:addRef={file.id}>
+		<button 
+            class="flex cursor-pointer flex-row items-baseline gap-4 p-4 lg:px-16 text-left w-full relative duration-100 border-b-2 border-black last:border-b-0 {file.id === $currentTrack?.id ? 'bg-gray-700 text-white' : 'hover:bg-gray-700 hover:text-white'}" 
+            onclick={() => selectTrack(file)} 
+            use:addRef={file.id}>
 			<!-- date -->
-			<div class="flex items-center pr-4 text-xs md:text-sm">
-				{file.sortDate.split("-")[2]}.{file.sortDate.split("-")[1]}.{file.year}
+			<div class="opacity-70 shrink-0 text-sm">
+				{file.sortDate.split("-")[2]}.{file.sortDate.split("-")[1]}.
 			</div>
 			<!-- title -->
-			<div class="my-1 flex items-center text-lg font-medium md:text-2xl">
+			<div class="text-lg font-medium md:text-2xl">
 				{file.title}
 			</div>
 		</button>

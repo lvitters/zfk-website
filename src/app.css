@@ -1,18 +1,22 @@
 @import "tailwindcss";
 
 @font-face {
-	font-family: "ClashGroteskRegular";
-	src: url("/fonts/ClashGrotesk-Regular.woff2") format("woff2");
+	font-family: "ClashDisplayVariable";
+	src: url("/fonts/ClashDisplay-Variable.woff2") format("woff2");
+	font-weight: 200 700;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: "ClashGroteskVariable";
+	src: url("/fonts/ClashGrotesk-Variable.woff2") format("woff2");
 	font-weight: normal;
 	font-style: normal;
 }
 
-html {
-}
-
 :root {
-	--bg-color: #f7f7f7;
-	--text-color: #1c1c1c;
+	--bg-color: #f8f8f8;
+	--text-color: #374151;
 	--text-glow: 0 0 5px rgba(0, 0, 0, 0.3);
 	--image-glow-filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.3));
 	--box-glow: 0 0 15px rgba(0, 0, 0, 0.2);
@@ -22,7 +26,7 @@ html {
 }
 
 body {
-	font-family: "ClashGroteskRegular", sans-serif;
+	font-family: "ClashDisplayVariable", sans-serif;
 	color: var(--text-color);
 	background-color: var(--bg-color);
 	text-shadow: var(--text-glow);
@@ -64,60 +68,7 @@ body {
 	}
 }
 
-@keyframes scroll-back-forth {
-	0%,
-	10% {
-		transform: translateX(0);
-	}
-	45%,
-	55% {
-		transform: translateX(var(--scroll-offset));
-	}
-	90%,
-	100% {
-		transform: translateX(0);
-	}
-}
-
-.animate-scroll-back-forth {
-	animation: scroll-back-forth 10s ease-in-out infinite;
-}
-
 @layer components {
-	.glow-box {
-		box-shadow: inset var(--box-glow);
-		transition: box-shadow 0.3s ease;
-	}
-
-	.glow-box:hover {
-		box-shadow: inset var(--box-glow-hover);
-	}
-
-	.glow-rainbow-active::before {
-		content: "";
-		position: absolute;
-		inset: 0;
-		z-index: -1;
-		background: linear-gradient(270deg, #ff00ff, #ffc000, #ccff00, #00ffff, #0080ff, #8000ff, #ff00ff);
-		background-size: 200% 200%;
-		filter: blur(8px);
-		animation: var(--animate-rainbow);
-		border-radius: inherit;
-		opacity: 0.7;
-	}
-
-	.bg-neon-rainbow {
-		background-image: linear-gradient(270deg, #ff00ff, #ffc000, #ccff00, #00ffff, #0080ff, #8000ff, #ff00ff);
-		background-size: 200% 200%;
-		animation: var(--animate-rainbow);
-	}
-
-	.bg-neon-rainbow-inverse {
-		background-image: linear-gradient(270deg, #ff00ff, #ffc000, #ccff00, #00ffff, #0080ff, #8000ff, #ff00ff);
-		background-size: 200% 200%;
-		animation: rainbow-inverse 12s ease infinite;
-	}
-
 	.kirby-content h1 {
 		@apply mt-12 mb-6 text-2xl font-bold md:mt-16 md:mb-8 md:text-4xl;
 		font-weight: 700;
@@ -182,27 +133,5 @@ body {
 
 	.kirby-content a {
 		@apply break-all underline hover:opacity-80;
-	}
-
-	.text-glow-white {
-		text-shadow:
-			0 0 10px rgba(255, 255, 255, 0.8),
-			0 0 20px rgba(255, 255, 255, 0.8);
-	}
-
-	.image-glow-white {
-		filter: drop-shadow(0 0 10px rgba(255, 255, 255, 1)) drop-shadow(0 0 20px rgba(255, 255, 255, 1));
-	}
-}
-
-@keyframes rainbow-inverse {
-	0% {
-		background-position: 100% 50%;
-	}
-	50% {
-		background-position: 200% 50%;
-	}
-	100% {
-		background-position: 100% 50%;
 	}
 }
