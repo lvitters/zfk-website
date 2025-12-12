@@ -3,7 +3,6 @@
 	import "$lib/css/fonts.css";
 	import { currentTrack } from "$lib/playerStore";
 	import type { Track } from "$lib/types";
-	import { getNavHeight } from "$lib/layoutState.svelte";
 	import { onMount } from "svelte";
 
 	let { audioFiles, selectedYear = $bindable() }: { audioFiles: Track[]; selectedYear?: string } = $props();
@@ -31,29 +30,8 @@
 		};
 	}
 
-	const scrollOffset = 20; // define a small gap in pixels
-
-	function scrollToElement(el: HTMLElement) {
-		const container = document.getElementById("main-content-scroll-container");
-
-		if (container && window.innerWidth >= 1024) {
-			// Desktop scrolling via container
-			const containerRect = container.getBoundingClientRect();
-			const elRect = el.getBoundingClientRect();
-			const relativeTop = elRect.top - containerRect.top;
-			const targetScroll = container.scrollTop + relativeTop - scrollOffset;
-
-			container.scrollTo({ top: targetScroll, behavior: "smooth" });
-		} else {
-			// Mobile scrolling via window
-			const y = el.getBoundingClientRect().top + window.scrollY - scrollOffset - 100;
-			window.scrollTo({ top: y, behavior: "smooth" });
-		}
-	}
-
 	function selectYear(year: string) {
 		selectedYear = year;
-		// No scrolling needed
 	}
 
 	function selectTrack(track: Track) {

@@ -11,12 +11,11 @@
 
 	let isDragging = $state(false);
 	let progressBar: HTMLDivElement | undefined = $state();
-	let barWidth = $state(0);
 
 	let isHoveringProgressBar = $state(false);
 	let hoverX = $state(0);
 
-	// Sync $isPlaying store to audio element state
+	// sync $isPlaying store to audio element state
 	$effect(() => {
 		if (!audio) return;
 		if ($isPlaying && audio.paused) {
@@ -35,7 +34,7 @@
 		}
 	});
 
-	// Autoplay when src changes or audio element becomes available
+	// autoplay when src changes or audio element becomes available
 	$effect(() => {
 		if (audio && src) {
 			audio.load();
@@ -43,6 +42,24 @@
 			isPlaying.set(true);
 		}
 	});
+
+	async function randomizeAndPlay() {
+		if (audioFiles && audioFiles.length > 0) {
+			const randomIndex = Math.floor(Math.random() * audioFiles.length);
+			const randomTrack = audioFiles[randomIndex];
+			currentTrack.set(randomTrack);
+		}
+	}
+
+	function togglePlayback(event: MouseEvent) {
+		event.stopPropagation(); // prevent seeking when clicking play button
+		if ($currentTrack) {
+			isPlaying.update((p) => !p);
+		} else {
+			randomizeAndPlay();
+			isPlaying.set(true);
+		}
+	}
 
 	function updateTime(clientX: number) {
 		if (!progressBar || !duration) return;
@@ -122,10 +139,42 @@
 		</audio>
 	{/if}
 
-	{#if $currentTrack}
-		<!-- Progress + Info -->
+	<!-- audio header: spinning logo + track info + progress bar -->
+	<div
+		class="relative flex w-full items-center overflow-hidden border-b-2 border-[var(--text-color)] bg-[var(--bg-color)] p-4">
+		<!-- spinning logo (leftmost) -->
+		<button
+			onclick={togglePlayback}
+			class="flex h-[80px] w-[80px] shrink-0 cursor-pointer items-center justify-center focus:outline-none md:h-[100px] md:w-[100px] lg:h-[120px] lg:w-[120px]"
+			aria-label={$isPlaying ? "Pause" : "Play"}>
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				viewBox="0 0 384 384"
+				class="animate-spin-vinyl h-full w-full text-[var(--text-color)] drop-shadow-[var(--text-glow)]"
+				style="animation-play-state: {$isPlaying ? 'running' : 'paused'}; fill: currentColor">
+				<path
+					d="M247.73,272.38l53.76-56.76h36.76l-71.95,71.78,49.69,51.19c41.6-35.22,68.02-87.82,68.02-146.59s-28.17-114.8-72.14-149.99l-18.99,4.04c-12.07,1.98-16.48,7.34-16.48,17.67v125.99h-26.57v-100.12h-17.96v-16.47l17.96-5.67c.02-30.16,8.15-39.31,31.8-45.28C254.86,8.02,224.37,0,192,0c-38.11,0-73.62,11.1-103.49,30.25h47.4l-19.76,22.31h-56.12C23.06,87.55,0,137.08,0,192c0,50.86,19.78,97.09,52.06,131.44v-107.82h26.99v131.64c31.7,23.1,70.73,36.74,112.95,36.74,38.1,0,73.6-11.1,103.46-30.23l-47.8-50.49.06-30.9ZM297.63,68.06h26.31v22.14h-26.31v-22.14ZM192.46,189.72h-125.81v-20.7L172.33,37.48l16.69-.19v19.02l-89.24,109.25v1.84h92.69v22.31Z" />
+			</svg>
+		</button>
+
+		{#if $currentTrack}
+			<!-- track info (time + title) to the right of the logo -->
+			<div class="pointer-events-none relative z-20 ml-4 flex flex-1 flex-col items-start gap-1 pt-2">
+				<!-- time -->
+				<div class="shrink-0 text-sm tabular-nums opacity-70 md:text-lg lg:text-xl">
+					{formatTime(currentTime)} / {formatTime(duration)}
+				</div>
+
+				<!-- title -->
+				<div class="truncate text-sm font-medium md:text-lg lg:text-3xl">
+					{$currentTrack.title}
+				</div>
+			</div>
+		{/if}
+
+		<!-- seekable progress bar area -->
 		<div
-			class="relative w-full cursor-none overflow-hidden border-b-2 border-[var(--text-color)] bg-[var(--bg-color)] p-4"
+			class="absolute bottom-0 left-0 right-0 h-[12px] cursor-none"
 			bind:this={progressBar}
 			role="button"
 			tabindex="0"
@@ -134,27 +183,14 @@
 			ontouchstart={onDragStart}
 			onmouseenter={() => (isHoveringProgressBar = true)}
 			onmouseleave={() => (isHoveringProgressBar = false)}
-			onmousemove={(e) => (hoverX = progressBar ? e.clientX - progressBar.getBoundingClientRect().left : 0)}>
-			<!-- Vertical hover indicator line -->
+			onmousemove={(e) => (hoverX = e.clientX - (e.currentTarget as HTMLElement).getBoundingClientRect().left)}>
+			<!-- vertical hover indicator line -->
 			<div
 				class="pointer-events-none absolute inset-y-0 w-[2px] bg-[var(--text-color)] transition-opacity duration-100"
 				style="left: {hoverX}px; opacity: {isHoveringProgressBar ? 1 : 0};">
 			</div>
 
-			<!-- Content: Time + Title -->
-			<div class="pointer-events-none relative z-20 flex w-full flex-col items-start gap-1">
-				<!-- Time -->
-				<div class="shrink-0 text-sm tabular-nums opacity-70 md:text-lg lg:text-xl">
-					{formatTime(currentTime)} / {formatTime(duration)}
-				</div>
-
-				<!-- Title -->
-				<div class="truncate text-sm font-medium md:text-lg lg:text-3xl">
-					{$currentTrack.title}
-				</div>
-			</div>
-
-			<!-- Progress Bar (Gradient from Bottom) -->
+			<!-- progress bar (gradient from bottom) -->
 			<div
 				class="pointer-events-none absolute bottom-0 left-0 z-10 h-[12px] overflow-hidden"
 				style="width: {duration ? (currentTime / duration) * 100 : 0}%; transition: width 0.1s linear;">
@@ -164,5 +200,5 @@
 				</div>
 			</div>
 		</div>
-	{/if}
+	</div>
 </div>
