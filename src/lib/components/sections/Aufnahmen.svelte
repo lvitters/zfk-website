@@ -37,25 +37,6 @@
 	function selectTrack(track: Track) {
 		currentTrack.set(track);
 	}
-
-	let bottomPadding = $state(128);
-
-	onMount(() => {
-		const updatePadding = () => {
-			if (window.innerWidth >= 1024) {
-				bottomPadding = window.innerHeight;
-			} else {
-				bottomPadding = 128;
-			}
-		};
-
-		updatePadding();
-		window.addEventListener("resize", updatePadding);
-
-		return () => {
-			window.removeEventListener("resize", updatePadding);
-		};
-	});
 </script>
 
 <!-- display files -->
@@ -65,7 +46,7 @@
 		<YearSelect {years} year={selectedYear} {selectYear} />
 	</div>
 
-	{#each filteredAudioFiles as file, index}
+	{#each filteredAudioFiles as file}
 		<!-- file row -->
 		<button
 			class="relative flex w-full cursor-pointer flex-col gap-1 border-b-2 border-[var(--text-color)] p-4 text-left duration-100 last:border-b-0 {file.id ===

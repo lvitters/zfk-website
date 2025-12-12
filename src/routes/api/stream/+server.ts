@@ -1,6 +1,6 @@
+import { error } from "@sveltejs/kit";
 import fs from "fs";
 import path from "path";
-import { error } from "@sveltejs/kit";
 
 export async function GET({ url, request }) {
 	const filePath = url.searchParams.get("file");
@@ -12,10 +12,10 @@ export async function GET({ url, request }) {
 	// Security: Prevent directory traversal and ensure we only serve from zfk-backend/media
 	// Resolve relative to zfk-frontend root (where package.json is)
 	// We assume zfk-backend is a sibling of zfk-frontend
-	const backendMediaDir = path.resolve("..", "zfk-backend"); 
-	
+	const backendMediaDir = path.resolve("..", "zfk-backend");
+
 	const requestedPath = path.resolve(backendMediaDir, filePath);
-	
+
 	console.log("Stream Debug:");
 	console.log("CWD:", process.cwd());
 	console.log("Backend Media Dir:", backendMediaDir);
@@ -32,7 +32,7 @@ export async function GET({ url, request }) {
 		// Fallback: Check if the file exists in the content source folder
 		// The structure in media is .../HASH/filename.mp3
 		// The structure in content is .../content/2_aufnahmen/filename.mp3
-		
+
 		const filename = path.basename(requestedPath);
 		// We know 'zfk-backend' is the parent of 'media', so we can find 'content' relative to it
 		const contentDir = path.resolve(backendMediaDir, "content/2_aufnahmen");
@@ -55,7 +55,7 @@ export async function GET({ url, request }) {
 	return serveFile(requestedPath, request);
 }
 
-function serveFile(filePath, request) {
+function serveFile(filePath: string, request: Request) {
 	// get file stats for range request handling
 	const stats = fs.statSync(filePath);
 	const contentLength = stats.size;
@@ -66,16 +66,16 @@ function serveFile(filePath, request) {
 		const [, start, end] = range.match(/bytes=(\d+)-(\d+)?/) || [];
 		const startByte = parseInt(start, 10);
 		const endByte = end ? parseInt(end, 10) : contentLength - 1;
-		
+
 		if (isNaN(startByte) || isNaN(endByte) || startByte >= contentLength || endByte >= contentLength) {
-             // 416 Range Not Satisfiable
-             return new Response(null, {
-                 status: 416,
-                 headers: {
-                     "Content-Range": `bytes */${contentLength}`
-                 }
-             });
-        }
+			// 416 Range Not Satisfiable
+			return new Response(null, {
+				status: 416,
+				headers: {
+					"Content-Range": `bytes */${contentLength}`,
+				},
+			});
+		}
 
 		const fileStream = fs.createReadStream(filePath, { start: startByte, end: endByte });
 

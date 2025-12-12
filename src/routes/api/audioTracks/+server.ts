@@ -1,5 +1,5 @@
-import { json } from "@sveltejs/kit";
 import { kql } from "$lib/server/kirby.js";
+import { json } from "@sveltejs/kit";
 
 export async function GET({ fetch }) {
 	try {
@@ -13,23 +13,23 @@ export async function GET({ fetch }) {
 					year: "file.datum.toDate('Y')",
 					displayDate: "file.datum.toDate('d.m.Y')",
 					sortDate: "file.datum.toDate('Y-m-d')",
-					filePath: "file.url"
-				}
+					filePath: "file.url",
+				},
 			},
-			fetch
+			fetch,
 		);
 
-		const audioFiles = (response || [])
+		const audioFiles = ((response === null ? [] : response) as any[])
 			.filter((file: any) => file.title && file.displayDate)
 			.map((file: any) => {
 				// Transform Kirby URL to local stream URL to support Range requests (seeking)
-			if (file.filePath && file.filePath.includes("/media/")) {
-				const relativePath = file.filePath.substring(file.filePath.indexOf("media/"));
-				file.filePath = `/api/stream?file=${relativePath}`;
-			}
+				if (file.filePath && file.filePath.includes("/media/")) {
+					const relativePath = file.filePath.substring(file.filePath.indexOf("media/"));
+					file.filePath = `/api/stream?file=${relativePath}`;
+				}
 
-			return file;
-		});
+				return file;
+			});
 
 		return json(audioFiles);
 	} catch (error) {

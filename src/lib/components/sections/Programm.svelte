@@ -3,6 +3,7 @@
 	import "$lib/css/fonts.css";
 	import { onMount } from "svelte";
 	import DiagonalStrip from "$lib/DiagonalStrip.svelte";
+	import { slide } from "svelte/transition";
 
 	let { events: rawEvents, selectedYear = $bindable() } = $props();
 
@@ -49,26 +50,6 @@
 		};
 	}
 
-	const scrollOffset = 20;
-
-	function scrollToElement(el: HTMLElement) {
-		const container = document.getElementById("main-content-scroll-container");
-
-		// fallback to window scrolling if container not found (SPA mode)
-		if (container && window.innerWidth >= 1024) {
-			const containerRect = container.getBoundingClientRect();
-			const elRect = el.getBoundingClientRect();
-			const relativeTop = elRect.top - containerRect.top;
-			const targetScroll = container.scrollTop + relativeTop - scrollOffset;
-
-			container.scrollTo({ top: targetScroll, behavior: "smooth" });
-		} else {
-			// Basic window scroll
-			const y = el.getBoundingClientRect().top + window.scrollY - scrollOffset - 100; // 100 buffer for sticky header
-			window.scrollTo({ top: y, behavior: "smooth" });
-		}
-	}
-
 	async function selectYear(year: number) {
 		expandedEventId = null;
 		selectedYear = year;
@@ -91,24 +72,12 @@
 		}
 	}
 
-	function closeEvent(e: Event) {
-		e.stopPropagation();
-		expandedEventId = null;
-	}
-
-	let bottomPadding = $state(128);
-
-	let imageButtonClasses = $derived((isExpanded: boolean, isEntryHovered: boolean) => {
-		let baseClasses = "cursor-pointer focus:outline-none duration-100 relative";
-		return `${baseClasses}`;
-	});
-
 	onMount(() => {
 		// no-op for now in SPA
 	});
 </script>
 
-{#snippet previewRow(event: any, index: number, isExpanded: boolean, rowHovered: boolean)}
+{#snippet previewRow(event: any, index: number)}
 	<!-- preview row -->
 	<div class="flex w-full justify-start">
 		<button
@@ -138,12 +107,12 @@
 				</h2>
 			</div>
 
-			<!-- Diagonal Pixel Row as Bottom Border -->
+			<!-- diagonal pixel row as bottom border -->
 			<div
 				class="absolute bottom-0 left-0 right-0 h-[12px] overflow-hidden"
 				style="mask-image: linear-gradient(to top, black, transparent); -webkit-mask-image: linear-gradient(to top, black, transparent);">
 				{#if event.thumbnailUrl}
-					<DiagonalStrip src={event.thumbnailUrl} alt="" class="h-full w-full object-fill" />
+					<DiagonalStrip src={event.thumbnailUrl} class="h-full w-full object-fill" />
 				{/if}
 			</div>
 		</button>
@@ -174,7 +143,7 @@
 
 		return tempDiv.innerHTML;
 	}}
-	<div class="expanded-event-container flex w-full flex-col items-center gap-6 p-4">
+	<div class="expanded-event-container flex w-full flex-col items-center gap-6 p-4" transition:slide>
 		<!-- Image Container (w-64 left aligned) -->
 		<div class="w-64 self-start">
 			{#if event.thumbnailUrl}
@@ -205,7 +174,7 @@
 		<div
 			class="event-row w-full border-b-2 border-[var(--text-color)] transition-colors last:border-b-0"
 			use:addRef={event.id}>
-			{@render previewRow(event, index, expandedEventId === event.id, isEntryHovered[index])}
+			{@render previewRow(event, index)}
 			{#if expandedEventId === event.id}
 				{@render expandedEventContent(event)}
 			{/if}

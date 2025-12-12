@@ -3,6 +3,6 @@
 	import "../app.css";
 </script>
 
-<div class="w-full min-h-screen bg-[var(--bg-color)]">
+<div class="min-h-screen w-full bg-[var(--bg-color)]">
 	{@render children()}
 </div>

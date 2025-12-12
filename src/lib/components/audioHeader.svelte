@@ -142,7 +142,7 @@
 		<!-- spinning logo (leftmost) -->
 		<button
 			onclick={togglePlayback}
-			class="flex h-[80px] w-[80px] shrink-0 cursor-pointer items-center justify-center focus:outline-none md:h-[100px] md:w-[100px] lg:h-[120px] lg:w-[120px]"
+			class="flex h-[80px] w-[80px] shrink-0 cursor-pointer items-center justify-center focus:outline-none md:h-[120px] md:w-[120px] lg:h-[150px] lg:w-[150px]"
 			aria-label={$isPlaying ? "Pause" : "Play"}>
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
@@ -171,7 +171,7 @@
 
 		<!-- seekable progress bar area -->
 		<div
-			class="absolute bottom-0 left-0 right-0 h-[12px] cursor-pointer"
+			class="absolute right-0 bottom-0 left-0 h-[12px] cursor-pointer"
 			bind:this={progressBar}
 			role="button"
 			tabindex="0"
@@ -181,7 +181,9 @@
 			<!-- Playhead -->
 			<div
 				class="absolute bottom-0 z-20 h-[12px] w-[12px] rounded-t-full bg-[var(--text-color)]"
-				style="left: {duration ? (currentTime / duration) * 100 : 0}%; transform: translateX(-50%); opacity: {$currentTrack ? 1 : 0};">
+				style="left: {duration
+					? (currentTime / duration) * 100
+					: 0}%; transform: translateX(-50%); opacity: {$currentTrack ? 1 : 0};">
 			</div>
 
 			<!-- progress bar (gradient from bottom) -->
