@@ -15,10 +15,10 @@
 }
 
 :root {
+	/* green: #082e33 petrol: #374151 */
 	--bg-color: #082e33;
 	--text-color: #ffffff;
 	--text-glow: 0 0 3px var(--text-color);
-	/* green: #082e33 petrol: #374151 */
 	--item-bg-color: var(--text-color);
 	--item-text-color: var(--bg-color);
 }
@@ -40,6 +40,7 @@ textarea {
 	text-shadow: inherit;
 }
 
+/* rainbow play progress */
 @theme {
 	--animate-scroll-left: scroll-left 20s linear infinite;
 	--animate-spin-vinyl: spin-vinyl 4s linear infinite;
@@ -73,6 +74,7 @@ textarea {
 	}
 }
 
+/* kirby content */
 @layer components {
 	.kirby-content h1 {
 		@apply mt-12 mb-6 text-2xl font-bold md:mt-16 md:mb-8 md:text-4xl;
@@ -103,37 +105,8 @@ textarea {
 		@apply my-6;
 	}
 
-	.kirby-content figure ul {
-		@apply my-6 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3;
-	}
-
-	.kirby-content figure ul li {
-		@apply list-none;
-	}
-
 	.kirby-content img {
 		@apply w-full lg:w-1/2;
-	}
-
-	.kirby-content figure ul li img {
-		@apply mt-4 mb-4 h-full w-full object-cover;
-	}
-
-	/* gallery block specific styling */
-	.kirby-content figure ul li figure {
-		@apply flex flex-col; /* stack image and caption vertically */
-	}
-
-	.kirby-content figure ul li figure img {
-		@apply mb-2; /* add space below image */
-	}
-
-	.kirby-content figure ul li figure figcaption {
-		@apply text-sm text-gray-600; /* basic caption style */
-	}
-
-	.desktop-expanded-content > figure:first-of-type {
-		display: none;
 	}
 
 	.kirby-content a {
@@ -146,5 +119,53 @@ textarea {
 
 	.kirby-content > :first-child {
 		margin-top: 0;
+	}
+
+	/* SLIDE GALLERY */
+	.kirby-content .gallery-wrapper {
+		@apply relative my-6 w-full md:w-1/2 lg:w-1/4;
+	}
+
+	/* TRACK */
+	.kirby-content .gallery-track {
+		@apply flex snap-x snap-mandatory overflow-x-auto scroll-smooth;
+		scrollbar-width: none;
+	}
+	.kirby-content .gallery-track::-webkit-scrollbar {
+		display: none;
+	}
+
+	/* SLIDE */
+	.kirby-content .gallery-slide {
+		@apply w-full flex-none snap-center;
+	}
+
+	/* IMAGE */
+	.kirby-content .gallery-wrapper img {
+		@apply block h-auto w-full object-cover;
+	}
+
+	/* BUTTONS */
+	.kirby-content .gallery-btn {
+		@apply absolute top-0 bottom-0 z-10 flex 
+           w-[15%] cursor-pointer items-center 
+           justify-center text-4xl text-white 
+           transition-colors duration-200 ease-in-out;
+
+		text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+	}
+
+	/* Button Hover State */
+	.kirby-content .gallery-btn:hover {
+		@apply bg-black/10;
+	}
+
+	/* Positioning */
+	.kirby-content .gallery-btn.prev {
+		@apply left-0;
+	}
+
+	.kirby-content .gallery-btn.next {
+		@apply right-0;
 	}
 }

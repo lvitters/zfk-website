@@ -1,5 +1,5 @@
 import { kql } from "$lib/server/kirby";
-import type { ProgrammEvent, KirbyImage, Track, KirbyPage, DynamicSection } from "$lib/types";
+import type { DynamicSection, KirbyImage, KirbyPage, ProgrammEvent, Track } from "$lib/types";
 import type { PageServerLoad } from "./$types";
 
 export const load: PageServerLoad = async ({ fetch }) => {
@@ -75,13 +75,7 @@ export const load: PageServerLoad = async ({ fetch }) => {
 		query: "page('recordings').title",
 	};
 
-	const [
-		eventsResult,
-		audioResult,
-		pagesResult,
-		eventsTitleResult,
-		recordingsTitleResult,
-	] = await Promise.all([
+	const [eventsResult, audioResult, pagesResult, eventsTitleResult, recordingsTitleResult] = await Promise.all([
 		kql(eventsQuery, fetch),
 		kql(audioQuery, fetch),
 		kql(pagesQuery, fetch),
