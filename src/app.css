@@ -143,4 +143,8 @@ textarea {
 	.kirby-content {
 		text-shadow: none;
 	}
+
+	.kirby-content > :first-child {
+		margin-top: 0;
+	}
 }

@@ -2,24 +2,24 @@
 	import AudioHeader from "$lib/components/audioHeader.svelte";
 	import Aufnahmen from "$lib/components/sections/Aufnahmen.svelte";
 	import Programm from "$lib/components/sections/Programm.svelte";
-	import Club from "$lib/components/sections/Club.svelte";
-	import Info from "$lib/components/sections/Info.svelte";
+	import Club from "$lib/components/sections/MainSection.svelte"; // Still needed for mainSection type
+	import Info from "$lib/components/sections/HeaderSection.svelte"; // Still needed for headerSection type
 
 	import "$lib/css/fonts.css";
 	import { slide } from "svelte/transition";
 
 	let { data } = $props();
-	let { events, audioFiles, clubPage, infoPages } = data;
+	let { events, audioFiles, dynamicSections } = data;
 
 	let expandedSection = $state(null as string | null);
 	let programmYear = $state<number | undefined>();
 	let aufnahmenYear = $state<string | undefined>();
 
-	function toggleSection(section: string) {
-		if (expandedSection === section) {
+	function toggleSection(sectionSlug: string) {
+		if (expandedSection === sectionSlug) {
 			expandedSection = null;
 		} else {
-			expandedSection = section;
+			expandedSection = sectionSlug;
 		}
 	}
 </script>
@@ -63,37 +63,26 @@
 		{/if}
 	</div>
 
-	<!-- club -->
-	<div class="relative w-full border-b-2 border-[var(--text-color)]">
-		<button
-			class="relative z-20 flex w-full cursor-pointer items-center justify-between p-4 text-left text-4xl font-bold uppercase transition-colors duration-300 md:text-8xl lg:text-9xl {expandedSection ===
-			'club'
-				? 'bg-[var(--text-color)] text-[var(--bg-color)]'
-				: 'bg-[var(--bg-color)] hover:bg-[var(--text-color)] hover:text-[var(--bg-color)]'}"
-			onclick={() => toggleSection("club")}>
-			Club
-		</button>
-		{#if expandedSection === "club"}
-			<div class="border-t-2 border-[var(--text-color)] bg-[var(--bg-color)]" transition:slide>
-				<Club page={clubPage} />
-			</div>
-		{/if}
-	</div>
-
-	<!-- info -->
-	<div class="relative w-full border-b-2 border-[var(--text-color)]">
-		<button
-			class="relative z-20 flex w-full cursor-pointer items-center justify-between p-4 text-left text-4xl font-bold uppercase transition-colors duration-300 md:text-8xl lg:text-9xl {expandedSection ===
-			'info'
-				? 'bg-[var(--text-color)] text-[var(--bg-color)]'
-				: 'bg-[var(--bg-color)] hover:bg-[var(--text-color)] hover:text-[var(--bg-color)]'}"
-			onclick={() => toggleSection("info")}>
-			Info
-		</button>
-		{#if expandedSection === "info"}
-			<div class="border-t-2 border-[var(--text-color)] bg-[var(--bg-color)]" transition:slide>
-				<Info {infoPages} />
-			</div>
-		{/if}
-	</div>
+	<!-- Dynamic Sections -->
+	{#each dynamicSections as section (section.id)}
+		<div class="relative w-full border-b-2 border-[var(--text-color)]">
+			<button
+				class="relative z-20 flex w-full cursor-pointer items-center justify-between p-4 text-left text-4xl font-bold uppercase transition-colors duration-300 md:text-8xl lg:text-9xl {expandedSection ===
+				section.slug
+					? 'bg-[var(--text-color)] text-[var(--bg-color)]'
+					: 'bg-[var(--bg-color)] hover:bg-[var(--text-color)] hover:text-[var(--bg-color)]'}"
+				onclick={() => toggleSection(section.slug)}>
+				{section.title}
+			</button>
+			{#if expandedSection === section.slug}
+				<div class="border-t-2 border-[var(--text-color)] bg-[var(--bg-color)]" transition:slide>
+					{#if section.type === 'headerSection'}
+						<Info infoPages={section.content} />
+					{:else if section.type === 'mainSection'}
+						<Club page={section.content} />
+					{/if}
+				</div>
+			{/if}
+		</div>
+	{/each}
 </div>

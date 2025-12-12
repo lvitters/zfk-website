@@ -1,6 +1,6 @@
 import { kql } from "$lib/server/kirby";
 import type { PageServerLoad } from "./$types";
-import type { ProgrammEvent, KirbyImage } from "$lib/types";
+import type { ProgrammEvent, KirbyImage, Track } from "$lib/types";
 
 export const load: PageServerLoad = async ({ fetch }) => {
 	// 1. Veranstaltungen Query
@@ -45,31 +45,30 @@ export const load: PageServerLoad = async ({ fetch }) => {
 		},
 	};
 
-	// 3. Club Query
-	const clubQuery = {
-		query: "page('club')",
-		select: {
-			title: true,
-			text: "page.text.toBlocks.toHtml",
-		},
-	};
-
-	// 4. Info Query
-	const infoQuery = {
-		query: "page('info').children.listed",
+	// 3. Generic Pages Query (for all other sections)
+	const pagesQuery = {
+		query: "site.children.listed",
 		select: {
 			id: true,
 			title: true,
 			slug: true,
 			text: "page.text.toBlocks.toHtml",
+			children: {
+				query: "page.children.listed",
+				select: {
+					id: true,
+					title: true,
+					slug: true,
+					text: "page.text.toBlocks.toHtml",
+				},
+			},
 		},
 	};
 
-	const [eventsResult, audioResult, clubResult, infoResult] = await Promise.all([
+	const [eventsResult, audioResult, pagesResult] = await Promise.all([
 		kql(eventsQuery, fetch),
 		kql(audioQuery, fetch),
-		kql(clubQuery, fetch),
-		kql(infoQuery, fetch),
+		kql(pagesQuery, fetch),
 	]);
 	console.log("Audio Result:", audioResult);
 
@@ -114,10 +113,23 @@ export const load: PageServerLoad = async ({ fetch }) => {
 			return file;
 		});
 
+	// Process Dynamic Sections
+	const dynamicSections = ((pagesResult || []) as any[])
+		.filter((page: any) => page.slug !== "veranstaltungen" && page.slug !== "aufnahmen")
+		.map((page: any) => {
+			const hasChildren = page.children && page.children.length > 0;
+			return {
+				id: page.id,
+				title: page.title,
+				slug: page.slug,
+				type: hasChildren ? "headerSection" : "mainSection",
+				content: hasChildren ? page.children : { text: page.text },
+			};
+		});
+
 	return {
 		events,
 		audioFiles,
-		clubPage: clubResult,
-		infoPages: infoResult || [],
+		dynamicSections,
 	};
 };
