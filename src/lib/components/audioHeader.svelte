@@ -188,7 +188,7 @@
 			ontouchstart={onDragStart}>
 			<!-- Playhead -->
 			<div
-				class="absolute bottom-0 z-20 h-[12px] w-[12px] rounded-t-full bg-[var(--text-color)]"
+				class="absolute bottom-0 z-20 h-[20px] w-[20px] rounded-t-full bg-[var(--text-color)]"
 				style="left: {duration
 					? (currentTime / duration) * 100
 					: 0}%; transform: translateX(-50%); opacity: {$currentTrack ? 1 : 0};">
@@ -196,7 +196,7 @@
 
 			<!-- progress bar (gradient from bottom) -->
 			<div
-				class="pointer-events-none absolute bottom-0 left-0 z-10 h-[12px] overflow-hidden"
+				class="pointer-events-none absolute bottom-0 left-0 z-10 h-[15px] overflow-hidden"
 				style="width: {duration ? (currentTime / duration) * 100 : 0}%; transition: width 0.1s linear;">
 				<div
 					class="h-full w-screen"

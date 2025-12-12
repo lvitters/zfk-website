@@ -106,7 +106,8 @@ textarea {
 	}
 
 	.kirby-content img {
-		@apply w-full cursor-pointer md:w-1/2 lg:w-1/3;
+		@apply w-full cursor-pointer md:w-1/2 lg:w-1/3 xl:w-1/4;
+		filter: drop-shadow(0 0 3px var(--text-color));
 	}
 
 	.kirby-content a {
@@ -123,7 +124,7 @@ textarea {
 
 	/* SLIDE GALLERY */
 	.kirby-content .gallery-wrapper {
-		@apply relative w-full md:w-1/2 lg:w-1/3;
+		@apply relative w-full bg-black md:w-1/2 lg:w-1/3 xl:w-1/4;
 	}
 
 	/* TRACK */
@@ -137,12 +138,13 @@ textarea {
 
 	/* SLIDE */
 	.kirby-content .gallery-slide {
-		@apply w-full flex-none snap-center;
+		@apply w-full flex-none snap-center flex items-center justify-center;
 	}
 
 	/* IMAGE */
 	.kirby-content .gallery-wrapper img {
 		@apply block h-auto w-full object-cover;
+		filter: drop-shadow(0 0 0 var(--text-color));
 	}
 
 	/* BUTTON GRID CONTAINER */
@@ -152,9 +154,9 @@ textarea {
 
 	/* GALLERY BUTTONS (individual) */
 	.kirby-content button.gallery-btn {
-		@apply flex h-full cursor-pointer items-center
-           justify-center text-4xl text-[var(--text-color)]
-           transition-colors duration-100 ease-in-out border-2 border-[var(--text-color)];
+		@apply flex cursor-pointer items-center
+           justify-center border-2 border-[var(--text-color)]
+           bg-[var(--bg-color)] text-4xl text-[var(--text-color)] transition-colors duration-100 ease-in-out;
 	}
 
 	/* Button Hover State */

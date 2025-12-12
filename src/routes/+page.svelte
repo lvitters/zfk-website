@@ -1,5 +1,5 @@
 <script lang="ts">
-	import AudioHeader from "$lib/components/audioHeader.svelte";
+	import AudioHeader from "$lib/components/AudioHeader.svelte";
 	import Aufnahmen from "$lib/components/sections/Aufnahmen.svelte";
 	import Programm from "$lib/components/sections/Programm.svelte";
 	import Club from "$lib/components/sections/MainSection.svelte"; // Still needed for mainSection type
