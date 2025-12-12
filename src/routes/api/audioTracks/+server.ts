@@ -1,10 +1,11 @@
-import { json } from "@sveltejs/kit";
 import { kql } from "$lib/server/kirby.js";
-import type { Track } from "$lib/types";export async function GET({ fetch }) {
+import type { Track } from "$lib/types";
+import { json } from "@sveltejs/kit";
+export async function GET({ fetch }) {
 	try {
 		const response = await kql(
 			{
-				query: "page('aufnahmen').files.sortBy('datum', 'desc')",
+				query: "page('recordings').files.sortBy('datum', 'desc')",
 				select: {
 					id: "file.uuid",
 					filename: "file.filename",

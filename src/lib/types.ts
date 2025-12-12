@@ -1,3 +1,19 @@
+export interface KirbyPage {
+	id: string;
+	title: string;
+	slug: string;
+	text?: string;
+	children?: KirbyPage[]; // Children are also KirbyPages
+}
+
+export interface DynamicSection {
+	id: string;
+	title: string;
+	slug: string;
+	type: "headerSection" | "mainSection";
+	content: KirbyPage[] | { text?: string }; // content for headerSection is children (KirbyPage[]), for mainSection is { text: string }
+}
+
 export interface Track {
 	id: string;
 	year: string;
@@ -16,7 +32,6 @@ export interface KirbyImage {
 	url: string;
 	uuid: string;
 }
-
 
 export interface ImageBlockContent {
 	image: string[];
@@ -46,6 +61,3 @@ export interface ProgrammEvent {
 	imageBlocks?: ImageBlock[]; // Now typed!
 	videos?: KirbyVideo[];
 }
-
-
-

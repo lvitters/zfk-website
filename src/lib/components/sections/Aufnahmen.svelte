@@ -4,7 +4,6 @@
 	import { currentTrack } from "$lib/playerStore";
 	import type { Track } from "$lib/types";
 
-
 	let { audioFiles, selectedYear = $bindable() }: { audioFiles: Track[]; selectedYear?: string } = $props();
 
 	// extract unique years and sort them in descending order

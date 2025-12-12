@@ -1,11 +1,11 @@
 import { kql } from "$lib/server/kirby";
+import type { ProgrammEvent, KirbyImage, Track, KirbyPage, DynamicSection } from "$lib/types";
 import type { PageServerLoad } from "./$types";
-import type { ProgrammEvent, KirbyImage, Track } from "$lib/types";
 
 export const load: PageServerLoad = async ({ fetch }) => {
 	// 1. Veranstaltungen Query
 	const eventsQuery = {
-		query: "page('veranstaltungen').children.listed.sortBy('date', 'desc')",
+		query: "page('events').children.listed.sortBy('date', 'desc')",
 		select: {
 			title: true,
 			date: true,
@@ -33,7 +33,7 @@ export const load: PageServerLoad = async ({ fetch }) => {
 
 	// 2. Aufnahmen Query
 	const audioQuery = {
-		query: "page('aufnahmen').files.sortBy('datum', 'desc')",
+		query: "page('recordings').files.sortBy('datum', 'desc')",
 		select: {
 			id: "file.uuid",
 			filename: "file.filename",
@@ -65,10 +65,28 @@ export const load: PageServerLoad = async ({ fetch }) => {
 		},
 	};
 
-	const [eventsResult, audioResult, pagesResult] = await Promise.all([
+	// 4. Events Page Title Query
+	const eventsTitleQuery = {
+		query: "page('events').title",
+	};
+
+	// 5. Recordings Page Title Query
+	const recordingsTitleQuery = {
+		query: "page('recordings').title",
+	};
+
+	const [
+		eventsResult,
+		audioResult,
+		pagesResult,
+		eventsTitleResult,
+		recordingsTitleResult,
+	] = await Promise.all([
 		kql(eventsQuery, fetch),
 		kql(audioQuery, fetch),
 		kql(pagesQuery, fetch),
+		kql(eventsTitleQuery, fetch),
+		kql(recordingsTitleQuery, fetch),
 	]);
 	console.log("Audio Result:", audioResult);
 
@@ -114,16 +132,16 @@ export const load: PageServerLoad = async ({ fetch }) => {
 		});
 
 	// Process Dynamic Sections
-	const dynamicSections = ((pagesResult || []) as any[])
-		.filter((page: any) => page.slug !== "veranstaltungen" && page.slug !== "aufnahmen")
-		.map((page: any) => {
+	const dynamicSections: DynamicSection[] = ((pagesResult || []) as KirbyPage[])
+		.filter((page: KirbyPage) => page.slug !== "events" && page.slug !== "recordings")
+		.map((page: KirbyPage) => {
 			const hasChildren = page.children && page.children.length > 0;
 			return {
 				id: page.id,
 				title: page.title,
 				slug: page.slug,
 				type: hasChildren ? "headerSection" : "mainSection",
-				content: hasChildren ? page.children : { text: page.text },
+				content: hasChildren ? (page.children as KirbyPage[]) : { text: page.text },
 			};
 		});
 
@@ -131,5 +149,7 @@ export const load: PageServerLoad = async ({ fetch }) => {
 		events,
 		audioFiles,
 		dynamicSections,
+		eventsTitle: eventsTitleResult as string,
+		recordingsTitle: recordingsTitleResult as string,
 	};
 };

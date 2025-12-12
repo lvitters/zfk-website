@@ -9,7 +9,7 @@
 	import { slide } from "svelte/transition";
 
 	let { data } = $props();
-	let { events, audioFiles, dynamicSections } = data;
+	let { events, audioFiles, dynamicSections, eventsTitle, recordingsTitle } = data;
 
 	let expandedSection = $state(null as string | null);
 	let programmYear = $state<number | undefined>();
@@ -38,10 +38,10 @@
 				? 'bg-[var(--text-color)] text-[var(--bg-color)]'
 				: 'bg-[var(--bg-color)] hover:bg-[var(--text-color)] hover:text-[var(--bg-color)]'}"
 			onclick={() => toggleSection("programm")}>
-			Programm
+			{eventsTitle}
 		</button>
 		{#if expandedSection === "programm"}
-			<div class="border-t-2 border-[var(--text-color)] bg-[var(--bg-color)]" transition:slide>
+			<div class="bg-[var(--bg-color)]" transition:slide>
 				<Programm {events} bind:selectedYear={programmYear} />
 			</div>
 		{/if}
@@ -54,10 +54,10 @@
 				? 'bg-[var(--text-color)] text-[var(--bg-color)]'
 				: 'bg-[var(--bg-color)] hover:bg-[var(--text-color)] hover:text-[var(--bg-color)]'}"
 			onclick={() => toggleSection("aufnahmen")}>
-			Aufnahmen
+			{recordingsTitle}
 		</button>
 		{#if expandedSection === "aufnahmen"}
-			<div class="border-t-2 border-[var(--text-color)] bg-[var(--bg-color)]" transition:slide>
+			<div class="bg-[var(--bg-color)]" transition:slide>
 				<Aufnahmen {audioFiles} bind:selectedYear={aufnahmenYear} />
 			</div>
 		{/if}
@@ -75,10 +75,10 @@
 				{section.title}
 			</button>
 			{#if expandedSection === section.slug}
-				<div class="border-t-2 border-[var(--text-color)] bg-[var(--bg-color)]" transition:slide>
-					{#if section.type === 'headerSection'}
+				<div class="bg-[var(--bg-color)]" transition:slide>
+					{#if section.type === "headerSection"}
 						<Info infoPages={section.content} />
-					{:else if section.type === 'mainSection'}
+					{:else if section.type === "mainSection"}
 						<Club page={section.content} />
 					{/if}
 				</div>

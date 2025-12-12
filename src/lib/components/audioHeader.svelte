@@ -167,11 +167,19 @@
 					{$currentTrack.title}
 				</div>
 			</div>
+		{:else}
+			<div class="pointer-events-none relative z-20 ml-4 flex flex-1 items-center">
+				<!-- Title, centered vertically -->
+				<div class="text-lg font-medium md:text-2xl">
+					Zentrum für <br />
+					Kollektivkultur e.V.
+				</div>
+			</div>
 		{/if}
 
 		<!-- seekable progress bar area -->
 		<div
-			class="absolute right-0 bottom-0 left-0 h-[12px] cursor-pointer"
+			class="absolute bottom-0 left-0 right-0 h-[12px] cursor-pointer"
 			bind:this={progressBar}
 			role="button"
 			tabindex="0"

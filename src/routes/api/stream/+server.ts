@@ -35,7 +35,7 @@ export async function GET({ url, request }) {
 
 		const filename = path.basename(requestedPath);
 		// We know 'zfk-backend' is the parent of 'media', so we can find 'content' relative to it
-		const contentDir = path.resolve(backendMediaDir, "content/2_aufnahmen");
+		const contentDir = path.resolve(backendMediaDir, "content/2_recordings");
 		const fallbackPath = path.join(contentDir, filename);
 
 		console.log("Checking fallback path:", fallbackPath);

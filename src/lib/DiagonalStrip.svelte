@@ -1,6 +1,4 @@
 <script lang="ts">
-
-
 	let { src, class: className = "" } = $props();
 
 	let canvas: HTMLCanvasElement;
