@@ -20,3 +20,13 @@ export function setNavHeight(height: number) {
 	// New setter for nav height
 	currentNavHeight = height;
 }
+
+let lightboxImage = $state<string | null>(null);
+
+export function getLightboxImage() {
+	return lightboxImage;
+}
+
+export function setLightboxImage(url: string | null) {
+	lightboxImage = url;
+}

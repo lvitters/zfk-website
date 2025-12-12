@@ -6,6 +6,8 @@
 
 	let { audioFiles, selectedYear = $bindable() }: { audioFiles: Track[]; selectedYear?: string } = $props();
 
+	let filteredAudioFiles = $derived(audioFiles.filter((file) => file.year === selectedYear));
+
 	// extract unique years and sort them in descending order
 	const years = Array.from(new Set(audioFiles.map((file) => file.year))).sort((a, b) => Number(b) - Number(a));
 
@@ -14,20 +16,6 @@
 			selectedYear = years[0];
 		}
 	});
-
-	let filteredAudioFiles = $derived(audioFiles.filter((file) => file.year === selectedYear));
-
-	// eventRefs and addRef for scrolling
-	let eventRefs = new Map<string, HTMLElement>();
-
-	function addRef(node: HTMLElement, id: string) {
-		eventRefs.set(id, node);
-		return {
-			destroy() {
-				eventRefs.delete(id);
-			},
-		};
-	}
 
 	function selectYear(year: string) {
 		selectedYear = year;
@@ -52,8 +40,7 @@
 			$currentTrack?.id
 				? 'bg-[var(--text-color)] text-[var(--bg-color)]'
 				: 'hover:bg-[var(--text-color)] hover:text-[var(--bg-color)]'}"
-			onclick={() => selectTrack(file)}
-			use:addRef={file.id}>
+			onclick={() => selectTrack(file)}>
 			<!-- date -->
 			<div class="shrink-0 text-base opacity-70 md:text-xl">
 				{file.sortDate.split("-")[2]}.{file.sortDate.split("-")[1]}.

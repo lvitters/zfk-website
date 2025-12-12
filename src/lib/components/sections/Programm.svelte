@@ -73,10 +73,6 @@
 			// Removed setTimeout and scrollToElement call
 		}
 	}
-
-	onMount(() => {
-		// no-op for now in SPA
-	});
 </script>
 
 {#snippet previewRow(event: ProgrammEvent, index: number)}
@@ -90,7 +86,7 @@
 			onclick={() => toggleEvent(event.id)}
 			onmouseenter={() => (isEntryHovered[index] = true)}
 			onmouseleave={() => (isEntryHovered[index] = false)}>
-			<!-- Content Overlay (now just regular content) -->
+			<!-- Content -->
 			<div class="flex w-full flex-col gap-1">
 				<div class="shrink-0 opacity-70">
 					<span class="text-base md:text-xl">
@@ -122,46 +118,11 @@
 {/snippet}
 
 {#snippet expandedEventContent(event: ProgrammEvent)}
-	{@const getFilteredFullText = (text: string | undefined) => {
-		if (!text) return "";
-		// Basic HTML parsing in browser environment
-		if (typeof document === "undefined") return text;
-
-		const tempDiv = document.createElement("div");
-		tempDiv.innerHTML = text;
-
-		const firstImage = tempDiv.querySelector("img");
-		const firstFigure = tempDiv.querySelector("figure");
-
-		if (firstImage) {
-			if (firstFigure && firstFigure.contains(firstImage)) {
-				firstFigure.remove();
-			} else {
-				firstImage.remove();
-			}
-		} else if (firstFigure) {
-			firstFigure.remove();
-		}
-
-		return tempDiv.innerHTML;
-	}}
-	<div class="expanded-event-container flex w-full flex-col items-center gap-6 p-4" transition:slide>
-		<!-- Image Container -->
-		<div class="w-64 self-start">
-			{#if event.thumbnailUrl}
-				<img src={event.thumbnailUrl} alt={event.title} class="h-auto w-full object-contain" />
-			{:else if event.videoUrl}
-				<video src={event.videoUrl} class="h-auto w-full object-contain" autoplay muted loop playsinline>
-				</video>
-			{:else}
-				<div class="aspect-video w-full bg-gray-200"></div>
-			{/if}
-		</div>
-
+	<div class="expanded-event-container flex w-full flex-col gap-6 p-4" transition:slide>
 		<!-- Event Text -->
 		<div class="kirby-content w-full text-base leading-relaxed md:text-lg">
 			<!-- eslint-disable-next-line svelte/no-at-html-tags -->
-			{@html getFilteredFullText(event.fullText)}
+			{@html event.fullText}
 		</div>
 	</div>
 {/snippet}
