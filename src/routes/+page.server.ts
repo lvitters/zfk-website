@@ -2,6 +2,7 @@ import { kql } from "$lib/server/kirby";
 import type { DynamicSection, KirbyImage, KirbyPage, ProgrammEvent, Track } from "$lib/types";
 import type { PageServerLoad } from "./$types";
 
+// helper to replace raw URLs with their title attribute in HTML
 const replaceUrlWithTitle = (html: string | undefined): string | undefined => {
 	if (!html) return html;
 	return html.replace(/<a\s+(?:[^>]*?\s+)?title="([^"]*)"(?:[^>]*?)>(.*?)<\/a>/gi, (match, title, text) => {
@@ -15,8 +16,9 @@ const replaceUrlWithTitle = (html: string | undefined): string | undefined => {
 	});
 };
 
+// main server load function to fetch data from kirby
 export const load: PageServerLoad = async ({ fetch }) => {
-	// 1. Veranstaltungen Query
+	// 1. events query
 	const eventsQuery = {
 		query: "page('events').children.listed.sortBy('date', 'desc')",
 		select: {
@@ -44,7 +46,7 @@ export const load: PageServerLoad = async ({ fetch }) => {
 		},
 	};
 
-	// 2. Aufnahmen Query
+	// 2. recordings query
 	const audioQuery = {
 		query: "page('recordings').files.sortBy('datum', 'desc')",
 		select: {
@@ -58,7 +60,7 @@ export const load: PageServerLoad = async ({ fetch }) => {
 		},
 	};
 
-	// 3. Generic Pages Query (for all other sections)
+	// 3. generic pages query (for all other sections)
 	const pagesQuery = {
 		query: "site.children.listed",
 		select: {
@@ -78,16 +80,17 @@ export const load: PageServerLoad = async ({ fetch }) => {
 		},
 	};
 
-	// 4. Events Page Title Query
+	// 4. events page title query
 	const eventsTitleQuery = {
 		query: "page('events').title",
 	};
 
-	// 5. Recordings Page Title Query
+	// 5. recordings page title query
 	const recordingsTitleQuery = {
 		query: "page('recordings').title",
 	};
 
+	// fetch all data in parallel
 	const [eventsResult, audioResult, pagesResult, eventsTitleResult, recordingsTitleResult] = await Promise.all([
 		kql(eventsQuery, fetch),
 		kql(audioQuery, fetch),
@@ -97,10 +100,11 @@ export const load: PageServerLoad = async ({ fetch }) => {
 	]);
 	console.log("Audio Result:", audioResult);
 
-	// Process Events
+	// process events data
 	const events = ((eventsResult || []) as ProgrammEvent[]).map((event: ProgrammEvent) => {
 		let thumbnailUrl = event.images?.[0]?.url;
 
+		// logic to find the first image block and use it as thumbnail
 		if (Array.isArray(event.imageBlocks) && event.imageBlocks.length > 0) {
 			const firstImageBlock = event.imageBlocks[0];
 			if (
@@ -128,10 +132,11 @@ export const load: PageServerLoad = async ({ fetch }) => {
 		};
 	});
 
-	// Process Audio
+	// process audio files data
 	const audioFiles = ((audioResult === null ? [] : audioResult) as Track[])
 		.filter((file: Track) => file.title && file.displayDate)
 		.map((file: Track) => {
+			// transform kirby media url to local proxy stream url
 			if (file.filePath && file.filePath.includes("/media/")) {
 				const relativePath = file.filePath.substring(file.filePath.indexOf("media/"));
 				file.filePath = `/api/stream?file=${relativePath}`;
@@ -139,7 +144,7 @@ export const load: PageServerLoad = async ({ fetch }) => {
 			return file;
 		});
 
-	// Process Dynamic Sections
+	// process dynamic sections data
 	const dynamicSections: DynamicSection[] = ((pagesResult || []) as KirbyPage[])
 		.filter((page: KirbyPage) => page.slug !== "events" && page.slug !== "recordings")
 		.map((page: KirbyPage) => {

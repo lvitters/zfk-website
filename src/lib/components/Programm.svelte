@@ -54,10 +54,11 @@
 	let innerContainer = $state<HTMLElement | null>(null);
 	let transitionTimeout: ReturnType<typeof setTimeout> | null = null;
 
+	// select a year and smoothly animate the container height change
 	async function selectYear(year: number) {
 		if (year === selectedYear) return;
 
-		// 1. Lock current height
+		// 1. lock current height
 		if (listContainer) {
 			const currentHeight = listContainer.offsetHeight;
 			listContainer.style.height = `${currentHeight}px`;
@@ -66,10 +67,10 @@
 		expandedEventId = null;
 		selectedYear = year;
 
-		// 2. Wait for DOM update
+		// 2. wait for dom update
 		await tick();
 
-		// 3. Animate to new height
+		// 3. animate to new height
 		if (listContainer && innerContainer) {
 			const newHeight = innerContainer.offsetHeight;
 			listContainer.style.height = `${newHeight}px`;
@@ -79,7 +80,7 @@
 				if (listContainer) {
 					listContainer.style.height = "auto";
 				}
-			}, 300); // Matches duration-300
+			}, 300); // matches duration-300
 		}
 	}
 
@@ -90,18 +91,18 @@
 		isEntryHovered = Array(events.length).fill(false);
 	});
 
+	// toggle the expanded state of a single event
 	function toggleEvent(id: string) {
 		if (expandedEventId === id) {
 			expandedEventId = null;
 		} else {
 			expandedEventId = id;
-			// Removed setTimeout and scrollToElement call
 		}
 	}
 </script>
 
 {#snippet previewRow(event: ProgrammEvent, index: number)}
-	<!-- preview row -->
+	<!-- preview row for event list -->
 	<div class="flex w-full justify-start">
 		<button
 			class="relative flex w-full cursor-pointer flex-col overflow-hidden p-4 text-left duration-100 focus:outline-none {expandedEventId ===
@@ -111,7 +112,7 @@
 			onclick={() => toggleEvent(event.id)}
 			onmouseenter={() => (isEntryHovered[index] = true)}
 			onmouseleave={() => (isEntryHovered[index] = false)}>
-			<!-- Content -->
+			<!-- content -->
 			<div class="flex w-full flex-col gap-1">
 				<div class="shrink-0 opacity-70">
 					<span class="text-base md:text-xl">
@@ -132,7 +133,7 @@
 
 			<!-- diagonal pixel row as bottom border -->
 			<div
-				class="absolute right-0 bottom-0 left-0 h-[12px] overflow-hidden"
+				class="absolute bottom-0 left-0 right-0 h-[12px] overflow-hidden"
 				style="mask-image: linear-gradient(to top, black, transparent); -webkit-mask-image: linear-gradient(to top, black, transparent);">
 				{#if event.thumbnailUrl}
 					<DiagonalStrip src={event.thumbnailUrl} class="h-full w-full object-fill" />
@@ -143,8 +144,9 @@
 {/snippet}
 
 {#snippet expandedEventContent(event: ProgrammEvent)}
+	<!-- expanded details view for an event -->
 	<div class="expanded-event-container flex w-full flex-col gap-6 p-4" transition:slide>
-		<!-- Event Text -->
+		<!-- event text -->
 		<div class="kirby-content w-full text-base leading-relaxed md:text-lg">
 			<!-- eslint-disable-next-line svelte/no-at-html-tags -->
 			{@html event.fullText}
@@ -153,7 +155,7 @@
 {/snippet}
 
 <div class="flex w-full flex-col bg-[var(--bg-color)]">
-	<!-- Year Select Row -->
+	<!-- year select row -->
 	<div class="w-full border-b-2 border-[var(--text-color)] p-4">
 		<YearSelect {years} year={selectedYear} {selectYear} />
 	</div>

@@ -22,6 +22,7 @@
 		}
 	});
 
+	// update audio source when current track changes
 	currentTrack.subscribe((track: Track | null) => {
 		if (track) {
 			src = track.filePath;
@@ -40,6 +41,7 @@
 		}
 	});
 
+	// pick a random track from the list and play it
 	async function randomizeAndPlay() {
 		if (audioFiles && audioFiles.length > 0) {
 			const randomIndex = Math.floor(Math.random() * audioFiles.length);
@@ -48,6 +50,7 @@
 		}
 	}
 
+	// toggle play/pause state or start random track if none selected
 	function togglePlayback(event: MouseEvent) {
 		event.stopPropagation(); // prevent seeking when clicking play button
 		if ($currentTrack) {
@@ -58,6 +61,7 @@
 		}
 	}
 
+	// update current time based on click/drag position
 	function updateTime(clientX: number) {
 		if (!progressBar || !duration) return;
 		if (!$currentTrack) return;
@@ -72,6 +76,7 @@
 		currentTime = newTime;
 	}
 
+	// start dragging the progress bar
 	function onDragStart(event: MouseEvent | TouchEvent) {
 		if (!$currentTrack) return;
 
@@ -90,6 +95,7 @@
 		window.addEventListener("touchend", onDragEnd);
 	}
 
+	// handle dragging movement
 	function onDragMove(event: MouseEvent | TouchEvent) {
 		if (!isDragging) return;
 		if (event.cancelable) {
@@ -100,6 +106,7 @@
 		updateTime(clientX);
 	}
 
+	// stop dragging
 	function onDragEnd() {
 		isDragging = false;
 		window.removeEventListener("mousemove", onDragMove);
@@ -108,6 +115,7 @@
 		window.removeEventListener("touchend", onDragEnd);
 	}
 
+	// helper to format seconds into mm:ss or hh:mm:ss
 	const formatTime = (time: number) => {
 		if (isNaN(time)) return "0:00";
 		const hours = Math.floor(time / 3600);
@@ -157,19 +165,19 @@
 		{#if $currentTrack}
 			<!-- track info (time + title) to the right of the logo -->
 			<div class="pointer-events-none relative z-20 ml-4 flex flex-1 flex-col items-start gap-1 pt-2">
-				<!-- Time -->
+				<!-- time -->
 				<div class="shrink-0 text-base tabular-nums opacity-70 md:text-xl">
 					{formatTime(currentTime)} / {formatTime(duration)}
 				</div>
 
-				<!-- Title -->
+				<!-- title -->
 				<div class="text-lg font-medium md:text-2xl">
 					{$currentTrack.title}
 				</div>
 			</div>
 		{:else}
 			<div class="pointer-events-none relative z-20 ml-4 flex flex-1 items-center">
-				<!-- Title, centered vertically -->
+				<!-- title, centered vertically -->
 				<div class="text-lg font-medium md:text-2xl">
 					Zentrum für <br />
 					Kollektivkultur e.V.
@@ -186,7 +194,7 @@
 			aria-label="Seek"
 			onmousedown={onDragStart}
 			ontouchstart={onDragStart}>
-			<!-- Playhead -->
+			<!-- playhead -->
 			<div
 				class="absolute bottom-0 z-20 flex h-[15px] w-[60px] items-center justify-center bg-[var(--text-color)] font-bold text-[var(--bg-color)]"
 				style="left: {duration ? (currentTime / duration) * 100 : 0}%; transform: translateX(-{duration

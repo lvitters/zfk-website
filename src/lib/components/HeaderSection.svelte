@@ -4,6 +4,7 @@
 	let { infoPages } = $props();
 	let expandedId = $state<string | null>(null);
 
+	// toggle the expanded state of an info page section
 	function toggle(id: string) {
 		expandedId = expandedId === id ? null : id;
 	}
@@ -11,6 +12,7 @@
 
 <div class="flex w-full flex-col">
 	{#each infoPages as page}
+		<!-- individual info page section with expandable content -->
 		<div class="border-b-2 border-[var(--text-color)] last:border-b-0">
 			<button
 				class="flex w-full cursor-pointer items-center justify-between p-4 text-left text-2xl font-medium focus:outline-none md:text-3xl lg:text-4xl {expandedId ===
@@ -22,7 +24,7 @@
 			</button>
 			{#if expandedId === page.id}
 				<div
-					class="kirby-content border-t-2 border-solid border-[var(--text-color)] p-4 text-base leading-relaxed"
+					class="kirby-content border-t-2 border-solid border-[var(--text-color)] bg-[var(--bg-color)] p-4 text-base leading-relaxed"
 					transition:slide>
 					<!-- eslint-disable-next-line svelte/no-at-html-tags -->
 					{@html page.text}

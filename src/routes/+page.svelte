@@ -15,6 +15,7 @@
 	let programmYear = $state<number | undefined>();
 	let aufnahmenYear = $state<string | undefined>();
 
+	// toggle the expanded state of a section by its slug
 	function toggleSection(sectionSlug: string) {
 		if (expandedSection === sectionSlug) {
 			expandedSection = null;
@@ -25,12 +26,12 @@
 </script>
 
 <div class="flex min-h-screen w-full flex-col px-2 md:px-6 lg:px-8">
-	<!-- audioHeader -->
+	<!-- audio header component -->
 	<div class="top-0 z-50 w-full bg-[var(--bg-color)]">
 		<AudioHeader {audioFiles} />
 	</div>
 
-	<!-- programm -->
+	<!-- programm (events) section -->
 	<div class="group relative w-full border-b-2 border-[var(--text-color)]">
 		<button
 			class="relative z-20 flex w-full cursor-pointer items-center justify-between p-4 text-left text-4xl font-bold uppercase transition-colors duration-300 md:text-8xl lg:text-9xl {expandedSection ===
@@ -47,6 +48,7 @@
 		{/if}
 	</div>
 
+	<!-- aufnahmen (recordings) section -->
 	<div class="relative w-full border-b-2 border-[var(--text-color)]">
 		<button
 			class="relative z-20 flex w-full cursor-pointer items-center justify-between p-4 text-left text-4xl font-bold uppercase transition-colors duration-300 md:text-8xl lg:text-9xl {expandedSection ===
@@ -63,7 +65,7 @@
 		{/if}
 	</div>
 
-	<!-- Dynamic Sections -->
+	<!-- dynamic sections (cms pages) -->
 	{#each dynamicSections as section (section.id)}
 		<div class="relative w-full border-b-2 border-[var(--text-color)]">
 			<button

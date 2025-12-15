@@ -2,6 +2,7 @@
 	let { years, year: selectedYear, selectYear } = $props();
 </script>
 
+<!-- horizontal list of year buttons for filtering content -->
 <div class="text-glow-white flex w-full flex-wrap items-center gap-4 text-sm md:text-xl lg:text-2xl">
 	{#each years || [] as year}
 		<button

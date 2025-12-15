@@ -20,10 +20,11 @@
 	let innerContainer = $state<HTMLElement | null>(null);
 	let transitionTimeout: ReturnType<typeof setTimeout> | null = null;
 
+	// select a year and smoothly animate the container height change
 	async function selectYear(year: string) {
 		if (year === selectedYear) return;
 
-		// 1. Lock current height
+		// 1. lock current height
 		if (listContainer) {
 			const currentHeight = listContainer.offsetHeight;
 			listContainer.style.height = `${currentHeight}px`;
@@ -31,10 +32,10 @@
 
 		selectedYear = year;
 
-		// 2. Wait for DOM update
+		// 2. wait for dom update
 		await tick();
 
-		// 3. Animate to new height
+		// 3. animate to new height
 		if (listContainer && innerContainer) {
 			const newHeight = innerContainer.offsetHeight;
 			listContainer.style.height = `${newHeight}px`;
@@ -44,18 +45,19 @@
 				if (listContainer) {
 					listContainer.style.height = "auto";
 				}
-			}, 300); // Matches duration-300
+			}, 300); // matches duration-300
 		}
 	}
 
+	// select a track to play
 	function selectTrack(track: Track) {
 		currentTrack.set(track);
 	}
 </script>
 
-<!-- display files -->
+<!-- display files list container -->
 <div class="flex w-full flex-col bg-[var(--bg-color)]">
-	<!-- Year Select -->
+	<!-- year select header -->
 	<div class="w-full border-b-2 border-[var(--text-color)] p-4">
 		<YearSelect {years} year={selectedYear} {selectYear} />
 	</div>
@@ -63,7 +65,7 @@
 	<div bind:this={listContainer} class="w-full overflow-hidden transition-[height] duration-300 ease-in-out">
 		<div bind:this={innerContainer} class="w-full">
 			{#each filteredAudioFiles as file}
-				<!-- file row -->
+				<!-- individual file row -->
 				<button
 					class="relative flex w-full cursor-pointer flex-col gap-1 border-b-2 border-[var(--text-color)] p-4 text-left duration-100 last:border-b-0 {file.id ===
 					$currentTrack?.id
