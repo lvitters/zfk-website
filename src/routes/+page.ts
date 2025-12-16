@@ -17,7 +17,7 @@ const replaceUrlWithTitle = (html: string | undefined): string | undefined => {
 	});
 };
 
-// helper to transform kirby urls to relative production paths
+// helper to transform Kirby urls to relative production paths
 const fixKirbyUrl = (url: string | undefined) => {
 	if (url && url.includes("/media/")) {
 		const mediaPath = url.substring(url.indexOf("/media/"));
@@ -35,7 +35,7 @@ const getRelativeMediaPath = (url: string | undefined) => {
 	return url || "";
 };
 
-// main client-side load function to fetch data from kirby
+// main client-side load function to fetch data from Kirby
 export const load: PageLoad = async ({ fetch }) => {
 	// 1. events query
 	const eventsQuery = {
@@ -67,15 +67,30 @@ export const load: PageLoad = async ({ fetch }) => {
 
 	// 2. recordings query
 	const audioQuery = {
-		query: "page('recordings').files.sortBy('datum', 'desc')",
+		query: "page('recordings')",
 		select: {
-			id: "file.uuid",
-			filename: "file.filename",
-			title: "file.titel.value",
-			year: "file.datum.toDate('Y')",
-			displayDate: "file.datum.toDate('d.m.Y')",
-			sortDate: "file.datum.toDate('Y-m-d')",
-			filePath: "file.url",
+			files: {
+				query: "page.files",
+				select: {
+					id: "file.uuid",
+					filename: "file.filename",
+					title: "file.titel.value",
+					year: "file.datum.toDate('Y')",
+					displayDate: "file.datum.toDate('d.m.Y')",
+					sortDate: "file.datum.toDate('Y-m-d')",
+					filePath: "file.url",
+				},
+			},
+			soundcloudLinks: {
+				query: "page.soundcloud_links.toStructure",
+				select: {
+					title: "structureItem.title.value",
+					sortDate: "structureItem.date.toDate('Y-m-d')",
+					displayDate: "structureItem.date.toDate('d.m.Y')",
+					year: "structureItem.date.toDate('Y')",
+					url: "structureItem.url.value",
+				},
+			},
 		},
 	};
 
@@ -151,7 +166,13 @@ export const load: PageLoad = async ({ fetch }) => {
 	});
 
 	// process audio files data
-	const audioFiles = ((audioResult === null ? [] : audioResult) as Track[])
+	const rawAudioData = audioResult as {
+		files: Track[];
+		soundcloudLinks: { title: string; sortDate: string; displayDate: string; year: string; url: string }[];
+	};
+
+	// process local audio files
+	const localFiles = (rawAudioData?.files || [])
 		.filter((file: Track) => file.title && file.displayDate)
 		.map((file: Track) => {
 			if (dev) {
@@ -163,8 +184,25 @@ export const load: PageLoad = async ({ fetch }) => {
 				// in production, use the direct backend url (served by apache/nginx with range support)
 				file.filePath = fixKirbyUrl(file.filePath) || "";
 			}
-			return file;
+			return { ...file, isExternal: false };
 		});
+
+	// process SoundCloud links
+	const externalLinks = (rawAudioData?.soundcloudLinks || []).map((link) => ({
+		id: link.url, // use url as id for external links
+		title: link.title,
+		year: link.year,
+		sortDate: link.sortDate,
+		displayDate: link.displayDate,
+		filePath: "", // empty for external
+		externalUrl: link.url,
+		isExternal: true,
+	}));
+
+	// merge and sort audio files by date
+	const audioFiles = [...localFiles, ...externalLinks].sort((a, b) => {
+		return new Date(b.sortDate).getTime() - new Date(a.sortDate).getTime();
+	});
 
 	// process dynamic sections data
 	const dynamicSections: DynamicSection[] = ((pagesResult || []) as KirbyPage[])

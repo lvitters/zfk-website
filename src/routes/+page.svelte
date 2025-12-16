@@ -3,7 +3,7 @@
 	import Aufnahmen from "$lib/components/Aufnahmen.svelte";
 	import Programm from "$lib/components/Programm.svelte";
 	import Club from "$lib/components/MainSection.svelte"; // Still needed for mainSection type
-	import Info from "$lib/components/HeaderSection.svelte"; // Still needed for headerSection type
+	import Info from "$lib/components/HeaderSection.svelte"; // Still needed for HeaderSection type
 
 	import "$lib/css/fonts.css";
 	import { slide } from "svelte/transition";
@@ -26,7 +26,7 @@
 </script>
 
 <div class="flex min-h-screen w-full flex-col px-2 md:px-6 lg:px-8">
-	<!-- audio header component -->
+	<!-- AudioHeader component -->
 	<div class="top-0 z-50 w-full bg-[var(--bg-color)]">
 		<AudioHeader {audioFiles} />
 	</div>

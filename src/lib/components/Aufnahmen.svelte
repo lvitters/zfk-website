@@ -1,7 +1,7 @@
 <script lang="ts">
 	import YearSelect from "$lib/components/YearSelect.svelte";
 	import "$lib/css/fonts.css";
-	import { currentTrack } from "$lib/playerStore";
+	import { currentTrack, isPlaying } from "$lib/playerStore";
 	import type { Track } from "$lib/types";
 	import { tick } from "svelte";
 
@@ -65,16 +65,50 @@
 	<div bind:this={listContainer} class="w-full overflow-hidden transition-[height] duration-300 ease-in-out">
 		<div bind:this={innerContainer} class="w-full">
 			{#each filteredAudioFiles as file}
+				{@const isActive = file.id === $currentTrack?.id}
 				<!-- individual file row -->
 				<button
-					class="relative flex w-full cursor-pointer flex-col gap-1 border-b-2 border-[var(--text-color)] p-4 text-left duration-100 last:border-b-0 {file.id ===
-					$currentTrack?.id
+					class="group relative flex w-full cursor-pointer flex-col gap-1 border-b-2 border-[var(--text-color)] p-4 text-left duration-100 last:border-b-0 {isActive
 						? 'bg-[var(--text-color)] text-[var(--bg-color)]'
 						: 'hover:bg-[var(--text-color)] hover:text-[var(--bg-color)]'}"
-					onclick={() => selectTrack(file)}>
-					<!-- date -->
-					<div class="shrink-0 text-base opacity-70 md:text-xl">
-						{file.sortDate.split("-")[2]}.{file.sortDate.split("-")[1]}.
+					onclick={() => {
+						if (isActive) {
+							isPlaying.update((p) => !p);
+						} else {
+							selectTrack(file);
+						}
+					}}>
+					<!-- date row with optional SoundCloud icon -->
+					<div class="flex h-6 w-full shrink-0 items-center text-base md:h-7 md:text-xl">
+						<span class="mr-auto md:mr-2">
+							{file.sortDate.split("-")[2]}.{file.sortDate.split("-")[1]}.
+						</span>
+						{#if file.isExternal}
+							<!-- SoundCloud logo aligned to the right of the date text (mobile) or left (desktop) -->
+							<a
+								href={file.externalUrl}
+								target="_blank"
+								rel="noopener noreferrer"
+								onclick={(e) => {
+									e.stopPropagation(); // prevent selectTrack from being called when clicking the logo
+								}}
+								class="ml-auto inline-flex h-full flex-shrink-0 origin-center items-center transition-transform duration-200 hover:scale-110 md:ml-0">
+								<!-- White Logo (default: visible. active/hover: hidden) -->
+								<img
+									src="/soundcloud_icon_white_transparent.png"
+									alt="SoundCloud"
+									class="h-full w-auto object-contain opacity-100 {isActive
+										? 'hidden'
+										: 'block group-hover:hidden'}" />
+								<!-- Black Logo (default: hidden. active/hover: visible) -->
+								<img
+									src="/soundcloud_icon_black_transparent.png"
+									alt="SoundCloud"
+									class="h-full w-auto object-contain opacity-100 {isActive
+										? 'block'
+										: 'hidden group-hover:block'}" />
+							</a>
+						{/if}
 					</div>
 					<!-- title -->
 					<div class="text-lg font-medium md:text-2xl">

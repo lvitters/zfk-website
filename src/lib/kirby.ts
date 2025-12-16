@@ -1,5 +1,3 @@
-import { dev } from "$app/environment";
-
 interface KqlResponse<T> {
 	code: number;
 	status: string;

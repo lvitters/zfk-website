@@ -1,10 +1,15 @@
 <script lang="ts">
 	import { currentTrack, isPlaying } from "$lib/playerStore";
 	import type { Track } from "$lib/types";
+	import { onMount } from "svelte";
 
 	let { audioFiles = [] } = $props();
 
 	let audio: HTMLAudioElement | undefined = $state();
+	let scIframe: HTMLIFrameElement | undefined = $state();
+	// eslint-disable-next-line no-undef
+	let scWidget: SoundCloudWidget | undefined = $state(); // SC.Widget instance
+
 	let currentTime = $state(0);
 	let duration = $state(0);
 	let src = $state("");
@@ -12,8 +17,63 @@
 	let isDragging = $state(false);
 	let progressBar: HTMLDivElement | undefined = $state();
 
-	// sync $isPlaying store to audio element state
+	// helper to load SC Widget API if not present (handled by svelte:head, but good to check)
+	// we rely on window.SC from the script tag
+
+	onMount(() => {
+		// initialize SC Widget if iframe exists
+		if (scIframe && window.SC) {
+			scWidget = window.SC.Widget(scIframe);
+			setupScEvents();
+		} else {
+			// poll for SC API availability just in case
+			const interval = setInterval(() => {
+				if (window.SC && scIframe) {
+					scWidget = window.SC.Widget(scIframe);
+					setupScEvents();
+					clearInterval(interval);
+				}
+			}, 100);
+		}
+	});
+
+	function setupScEvents() {
+		if (!scWidget) return;
+
+		scWidget.bind(window.SC.Widget.Events.READY, () => {
+			// console.log("SC Widget Ready");
+		});
+
+		scWidget.bind(window.SC.Widget.Events.PLAY, () => {
+			isPlaying.set(true);
+		});
+
+		scWidget.bind(window.SC.Widget.Events.PAUSE, () => {
+			isPlaying.set(false);
+		});
+
+		scWidget.bind(window.SC.Widget.Events.FINISH, () => {
+			isPlaying.set(false);
+		});
+
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		scWidget.bind(window.SC.Widget.Events.PLAY_PROGRESS, (data: any) => {
+			if (!isDragging) {
+				currentTime = data.currentPosition / 1000; // ms to s
+			}
+		});
+
+		scWidget.bind(window.SC.Widget.Events.Do, () => {
+			// "Do" seems to be undefined in types usually, but Duration change is key
+			// some docs say READY gives duration, or load callback
+		});
+
+		// also bind to ready/load to get duration
+	}
+
+	// sync $isPlaying store to audio element state (HTML5 ONLY)
 	$effect(() => {
+		if ($currentTrack?.isExternal) return; // skip for SC
 		if (!audio) return;
 		if ($isPlaying && audio.paused) {
 			audio.play().catch((e) => console.error("Play failed:", e));
@@ -25,15 +85,47 @@
 	// update audio source when current track changes
 	currentTrack.subscribe((track: Track | null) => {
 		if (track) {
-			src = track.filePath;
 			// reset state
 			currentTime = 0;
 			duration = 0;
+			isPlaying.set(false);
+
+			if (track.isExternal) {
+				// handle SoundCloud
+				if (audio) {
+					audio.pause();
+					audio.src = ""; // stop HTML5 download
+				}
+				if (scWidget) {
+					scWidget.load(track.externalUrl || "", {
+						auto_play: true,
+						show_artwork: false,
+						buying: false, // hide buy button
+						sharing: false,
+						download: false,
+						show_playcount: false,
+						callback: () => {
+							scWidget?.getDuration((d: number) => {
+								duration = d / 1000; // ms to s
+							});
+							isPlaying.set(true);
+						},
+					});
+				}
+			} else {
+				// handle local file
+				if (scWidget) {
+					scWidget.pause();
+				}
+				src = track.filePath;
+				// HTML5 audio "autoplay" handled by the effect below or onloadedmetadata
+			}
 		}
 	});
 
-	// autoplay when src changes or audio element becomes available
+	// autoplay when src changes or audio element becomes available (HTML5 ONLY)
 	$effect(() => {
+		if ($currentTrack?.isExternal) return;
 		if (audio && src) {
 			audio.load();
 			audio.play().catch((e) => console.error("Autoplay failed:", e));
@@ -54,10 +146,15 @@
 	function togglePlayback(event: MouseEvent) {
 		event.stopPropagation(); // prevent seeking when clicking play button
 		if ($currentTrack) {
-			isPlaying.update((p) => !p);
+			if ($currentTrack.isExternal) {
+				if (scWidget) {
+					scWidget.toggle();
+				}
+			} else {
+				isPlaying.update((p) => !p);
+			}
 		} else {
 			randomizeAndPlay();
-			isPlaying.set(true);
 		}
 	}
 
@@ -72,7 +169,13 @@
 		const ratio = Math.max(0, Math.min(1, x / width));
 		const newTime = ratio * duration;
 
-		if (audio) audio.currentTime = newTime;
+		if ($currentTrack.isExternal) {
+			if (scWidget) {
+				scWidget.seekTo(newTime * 1000); // s to ms
+			}
+		} else {
+			if (audio) audio.currentTime = newTime;
+		}
 		currentTime = newTime;
 	}
 
@@ -80,8 +183,11 @@
 	function onDragStart(event: MouseEvent | TouchEvent) {
 		if (!$currentTrack) return;
 
-		if (audio && audio.paused) {
-			isPlaying.set(true);
+		// ensure playing
+		if ($currentTrack.isExternal) {
+			if (scWidget) scWidget.play();
+		} else {
+			if (audio && audio.paused) isPlaying.set(true);
 		}
 
 		isDragging = true;
@@ -130,19 +236,38 @@
 	};
 </script>
 
+<svelte:head>
+	<script src="https://w.soundcloud.com/player/api.js"></script>
+</svelte:head>
+
 <div class="flex w-full flex-col">
-	{#if $currentTrack}
-		<audio
-			bind:this={audio}
-			bind:duration
-			bind:currentTime
-			onplay={() => isPlaying.set(true)}
-			onpause={() => isPlaying.set(false)}
-			onloadedmetadata={() => (duration = (audio as HTMLAudioElement).duration)}
-			{src}
-			class="hidden">
-		</audio>
-	{/if}
+	<!-- HTML5 Audio -->
+	<audio
+		bind:this={audio}
+		bind:duration
+		bind:currentTime
+		onplay={() => isPlaying.set(true)}
+		onpause={() => isPlaying.set(false)}
+		onloadedmetadata={() => {
+			if (!$currentTrack?.isExternal) duration = (audio as HTMLAudioElement).duration;
+		}}
+		{src}
+		class="hidden">
+	</audio>
+
+	<!-- SoundCloud Widget Iframe (hidden) -->
+	<iframe
+		bind:this={scIframe}
+		id="sc-widget"
+		width="100%"
+		height="166"
+		scrolling="no"
+		frameborder="no"
+		allow="autoplay"
+		src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/293&show_artwork=false"
+		class="hidden"
+		title="SoundCloud Player">
+	</iframe>
 
 	<!-- audio header: spinning logo + track info + progress bar -->
 	<div
