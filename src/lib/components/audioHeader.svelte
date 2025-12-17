@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { currentTrack, isPlaying } from "$lib/playerStore";
+	import { currentTrack, isPlaying } from "$lib/stores";
 	import type { Track } from "$lib/types";
 	import { onMount } from "svelte";
 

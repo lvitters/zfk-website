@@ -2,10 +2,8 @@
 	import AudioHeader from "$lib/components/AudioHeader.svelte";
 	import Aufnahmen from "$lib/components/Aufnahmen.svelte";
 	import Programm from "$lib/components/Programm.svelte";
-	import Club from "$lib/components/MainSection.svelte"; // Still needed for mainSection type
-	import Info from "$lib/components/HeaderSection.svelte"; // Still needed for HeaderSection type
-
-	import "$lib/css/fonts.css";
+	import Club from "$lib/components/MainSection.svelte";
+	import Info from "$lib/components/HeaderSection.svelte";
 	import { slide } from "svelte/transition";
 
 	let { data } = $props();

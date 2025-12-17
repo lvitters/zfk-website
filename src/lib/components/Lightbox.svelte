@@ -1,14 +1,14 @@
 <script lang="ts">
-	import { setLightboxImage, getLightboxImage } from "$lib/layoutState.svelte";
+	import { lightboxImage } from "$lib/stores";
 	import { fade } from "svelte/transition";
 
-	let imageUrl = $derived(getLightboxImage());
+	let imageUrl = $derived($lightboxImage);
 
 	function close(event?: MouseEvent) {
 		if (event) {
 			event.stopPropagation();
 		}
-		setLightboxImage(null);
+		lightboxImage.set(null);
 	}
 
 	function handleKeydown(event: KeyboardEvent) {
