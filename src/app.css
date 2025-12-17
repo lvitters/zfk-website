@@ -128,7 +128,7 @@ textarea {
 		font-size: clamp(1rem, 1vw + 0.5rem, 1.25rem);
 		white-space: pre-line;
 		font-weight: 400;
-		width: min(100%, 75ch);
+		width: min(100%, 70ch);
 		opacity: 0.8;
 	}
 
@@ -149,7 +149,7 @@ textarea {
 	.kirby-content iframe {
 		@apply w-full cursor-pointer;
 		filter: drop-shadow(0 0 3px var(--text-color));
-		width: min(100%, 40rem);
+		width: min(100%, 30rem);
 	}
 
 	.kirby-content a {

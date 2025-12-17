@@ -307,11 +307,11 @@
 
 	<!-- audio header: spinning logo + track info + progress bar -->
 	<div
-		class="relative flex w-full items-center overflow-hidden border-b-2 border-[var(--text-color)] bg-[var(--bg-color)] p-4 py-8">
+		class="relative flex w-full items-center overflow-hidden border-b-2 border-[var(--text-color)] bg-[var(--bg-color)] p-4 py-6 md:py-8">
 		<!-- spinning logo (leftmost) -->
 		<button
 			onclick={togglePlayback}
-			class="flex h-[clamp(75px,18vw,200px)] w-[clamp(75px,18vw,200px)] shrink-0 cursor-pointer items-center justify-center focus:outline-none"
+			class="flex h-[clamp(98px,21vw,210px)] w-[clamp(98px,21vw,210px)] shrink-0 cursor-pointer items-center justify-center focus:outline-none"
 			aria-label={$isPlaying ? "Pause" : "Play"}>
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
@@ -357,7 +357,7 @@
 			ontouchstart={onDragStart}>
 			<!-- playhead -->
 			<div
-				class="absolute bottom-0 z-20 flex h-[10px] w-[40px] items-center justify-center bg-[var(--text-color)] font-bold text-[var(--bg-color)] md:h-[15px] md:w-[60px]"
+				class="absolute bottom-0 z-20 flex h-[14px] w-[40px] items-center justify-center bg-[var(--text-color)] text-[12px] font-bold text-[var(--bg-color)] md:h-[18px] md:w-[60px] md:text-sm"
 				style="left: {duration ? (currentTime / duration) * 100 : 0}%; transform: translateX(-{duration
 					? (currentTime / duration) * 100
 					: 0}%); opacity: {$currentTrack ? 1 : 0};">
@@ -371,7 +371,9 @@
 					: 'width 0.1s linear'};">
 				<div
 					class="h-full w-screen"
-					style="background-image: linear-gradient(270deg, #ff00ff, #ffc000, #ccff00, #00ffff, #0080ff, #8000ff, #ff00ff, #ffc000, #ccff00, #00ffff, #0080ff, #8000ff, #ff00ff, #ffc000, #ccff00, #00ffff, #0080ff, #8000ff, #ff00ff, #ffc000, #ccff00, #00ffff, #0080ff, #8000ff, #ff00ff); background-size: 400% 100%; animation: var(--animate-rainbow); animation-play-state: {$isPlaying ? 'running' : 'paused'}; mask-image: linear-gradient(to top, black, transparent); -webkit-mask-image: linear-gradient(to top, black, transparent);">
+					style="background-image: linear-gradient(270deg, #ff00ff, #ffc000, #ccff00, #00ffff, #0080ff, #8000ff, #ff00ff, #ffc000, #ccff00, #00ffff, #0080ff, #8000ff, #ff00ff, #ffc000, #ccff00, #00ffff, #0080ff, #8000ff, #ff00ff, #ffc000, #ccff00, #00ffff, #0080ff, #8000ff, #ff00ff); background-size: 400% 100%; animation: var(--animate-rainbow); animation-play-state: {$isPlaying
+						? 'running'
+						: 'paused'}; mask-image: linear-gradient(to top, black, transparent); -webkit-mask-image: linear-gradient(to top, black, transparent);">
 				</div>
 			</div>
 		</div>
