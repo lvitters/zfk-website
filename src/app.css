@@ -89,7 +89,8 @@ textarea {
 
 	/* HEADINGS */
 	.kirby-content h1 {
-		@apply text-2xl md:text-4xl;
+		@apply font-bold;
+		font-size: clamp(1.5rem, 5vw, 3rem);
 		font-weight: 900;
 	}
 	/* If H1 follows something (rare), give it extra space */
@@ -98,7 +99,8 @@ textarea {
 	}
 
 	.kirby-content h2 {
-		@apply text-xl md:text-2xl;
+		@apply font-bold;
+		font-size: clamp(1.25rem, 3vw, 2rem);
 		font-weight: 600;
 	}
 	.kirby-content > * + h2 {
@@ -106,7 +108,8 @@ textarea {
 	}
 
 	.kirby-content h3 {
-		@apply text-lg md:text-xl;
+		@apply font-medium;
+		font-size: clamp(1.1rem, 2vw, 1.5rem);
 		font-weight: 500;
 	}
 	.kirby-content > * + h3 {
@@ -114,7 +117,8 @@ textarea {
 	}
 
 	.kirby-content h4 {
-		@apply text-xl tracking-wide md:text-2xl;
+		@apply font-bold tracking-wide;
+		font-size: clamp(1.25rem, 3vw, 2rem);
 		font-weight: 700;
 	}
 	.kirby-content > * + h4 {
@@ -123,9 +127,11 @@ textarea {
 
 	/* TEXT */
 	.kirby-content p {
-		@apply min-h-[1em] w-full lg:w-3/4 xl:w-2/3;
+		@apply min-h-[1em];
+		font-size: clamp(1rem, 1vw + 0.5rem, 1.25rem);
 		white-space: pre-line;
 		font-weight: 400;
+		width: min(100%, 75ch);
 	}
 
 	/* Contextual: Tighten text following a heading (Grouping) */
@@ -143,10 +149,9 @@ textarea {
 
 	.kirby-content img,
 	.kirby-content iframe {
-		@apply w-full cursor-pointer md:w-2/3 lg:w-1/3 xl:w-1/4;
+		@apply w-full cursor-pointer;
 		filter: drop-shadow(0 0 3px var(--text-color));
-		/* Ensure media has space if it follows text */
-		@apply mt-8 md:mt-10;
+		width: min(100%, 40rem);
 	}
 
 	.kirby-content a {

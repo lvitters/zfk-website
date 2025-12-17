@@ -307,11 +307,11 @@
 
 	<!-- audio header: spinning logo + track info + progress bar -->
 	<div
-		class="relative flex w-full items-center overflow-hidden border-b-2 border-[var(--text-color)] bg-[var(--bg-color)] p-4">
+		class="relative flex w-full items-center overflow-hidden border-b-2 border-[var(--text-color)] bg-[var(--bg-color)] p-4 py-8">
 		<!-- spinning logo (leftmost) -->
 		<button
 			onclick={togglePlayback}
-			class="flex h-[80px] w-[80px] shrink-0 cursor-pointer items-center justify-center focus:outline-none md:h-[120px] md:w-[120px] lg:h-[150px] lg:w-[150px]"
+			class="flex h-[clamp(75px,18vw,200px)] w-[clamp(75px,18vw,200px)] shrink-0 cursor-pointer items-center justify-center focus:outline-none"
 			aria-label={$isPlaying ? "Pause" : "Play"}>
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
@@ -327,19 +327,19 @@
 			<!-- track info (time + title) to the right of the logo -->
 			<div class="pointer-events-none relative z-20 ml-4 flex flex-1 flex-col items-start gap-1 pt-2">
 				<!-- time -->
-				<div class="shrink-0 text-base tabular-nums opacity-70 md:text-xl">
+				<div class="shrink-0 text-[clamp(1rem,3vw,1.5rem)] tabular-nums leading-none opacity-70">
 					{formatTime(currentTime)} / {formatTime(duration)}
 				</div>
 
 				<!-- title -->
-				<div class="text-lg font-medium md:text-2xl">
+				<div class="text-[clamp(1rem,3vw,1.5rem)] font-medium leading-none">
 					{$currentTrack.title}
 				</div>
 			</div>
 		{:else}
 			<div class="pointer-events-none relative z-20 ml-4 flex flex-1 items-center">
 				<!-- title, centered vertically -->
-				<div class="text-lg font-medium md:text-2xl">
+				<div class="text-[clamp(1rem,3vw,1.5rem)] font-medium leading-none">
 					Zentrum für <br />
 					Kollektivkultur e.V.
 				</div>

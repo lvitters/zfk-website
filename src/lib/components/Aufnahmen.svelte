@@ -78,7 +78,7 @@
 						}
 					}}>
 					<!-- date row with optional SoundCloud icon -->
-					<div class="flex h-6 w-full shrink-0 items-center text-base md:h-7 md:text-xl">
+					<div class="flex h-6 w-full shrink-0 items-center text-[clamp(1rem,3vw,1.5rem)] leading-none">
 						<span class="mr-auto md:mr-2">
 							{file.sortDate.split("-")[2]}.{file.sortDate.split("-")[1]}.
 						</span>
@@ -110,7 +110,7 @@
 						{/if}
 					</div>
 					<!-- title -->
-					<div class="text-lg font-medium md:text-2xl">
+					<div class="text-[clamp(1rem,3vw,1.5rem)] font-medium leading-none">
 						{file.title}
 					</div>
 				</button>

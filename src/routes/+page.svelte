@@ -32,11 +32,10 @@
 	<!-- programm (events) section -->
 	<div class="group relative w-full border-b-2 border-[var(--text-color)]">
 		<button
-			class="relative z-20 flex w-full cursor-pointer items-center justify-between p-4 text-left text-4xl font-bold uppercase transition-colors duration-300 md:text-8xl lg:text-9xl {expandedSection ===
+			class="relative z-20 flex w-full cursor-pointer items-center py-2 md:px-4 text-left font-bold uppercase leading-none transition-colors duration-300 text-[clamp(2.5rem,13vw,10rem)] {expandedSection ===
 			'programm'
 				? 'bg-[var(--text-color)] text-[var(--bg-color)]'
 				: 'bg-[var(--bg-color)] hover:bg-[var(--text-color)] hover:text-[var(--bg-color)]'}"
-			style="font-weight: 900;"
 			onclick={() => toggleSection("programm")}>
 			{eventsTitle}
 		</button>
@@ -50,7 +49,7 @@
 	<!-- aufnahmen (recordings) section -->
 	<div class="relative w-full border-b-2 border-[var(--text-color)]">
 		<button
-			class="relative z-20 flex w-full cursor-pointer items-center justify-between p-4 text-left text-4xl font-bold uppercase transition-colors duration-300 md:text-8xl lg:text-9xl {expandedSection ===
+			class="relative z-20 flex w-full cursor-pointer items-center py-2 md:px-4 text-left font-bold uppercase leading-none transition-colors duration-300 text-[clamp(2.5rem,13vw,10rem)] {expandedSection ===
 			'aufnahmen'
 				? 'bg-[var(--text-color)] text-[var(--bg-color)]'
 				: 'bg-[var(--bg-color)] hover:bg-[var(--text-color)] hover:text-[var(--bg-color)]'}"
@@ -68,7 +67,7 @@
 	{#each dynamicSections as section (section.id)}
 		<div class="relative w-full border-b-2 border-[var(--text-color)]">
 			<button
-				class="relative z-20 flex w-full cursor-pointer items-center justify-between p-4 text-left text-4xl font-bold uppercase transition-colors duration-300 md:text-8xl lg:text-9xl {expandedSection ===
+				class="relative z-20 flex w-full cursor-pointer items-center py-2 md:px-4 text-left font-bold uppercase leading-none transition-colors duration-300 text-[clamp(2.5rem,13vw,10rem)] {expandedSection ===
 				section.slug
 					? 'bg-[var(--text-color)] text-[var(--bg-color)]'
 					: 'bg-[var(--bg-color)] hover:bg-[var(--text-color)] hover:text-[var(--bg-color)]'}"
