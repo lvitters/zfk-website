@@ -64,13 +64,10 @@ textarea {
 
 	@keyframes rainbow {
 		0% {
-			background-position: 0% 50%;
-		}
-		50% {
-			background-position: 100% 50%;
+			background-position: 100% 0%;
 		}
 		100% {
-			background-position: 0% 50%;
+			background-position: 0% 0%;
 		}
 	}
 }
@@ -132,6 +129,7 @@ textarea {
 		white-space: pre-line;
 		font-weight: 400;
 		width: min(100%, 75ch);
+		opacity: 0.8;
 	}
 
 	/* Contextual: Tighten text following a heading (Grouping) */

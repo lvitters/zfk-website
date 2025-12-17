@@ -112,23 +112,22 @@
 			onmouseenter={() => (isEntryHovered[index] = true)}
 			onmouseleave={() => (isEntryHovered[index] = false)}>
 			<!-- content -->
-			<div class="flex w-full flex-col gap-1">
-				<div class="shrink-0 opacity-70">
-					<span class="text-base md:text-xl">
-						{event.displayDate}
-					</span>
-
-					{#if event.displayTime}
-						<span class="ml-1 text-base md:text-xl">
-							{event.displayTime}
-						</span>
-					{/if}
-				</div>
-
-				<h2 class="text-lg font-medium md:text-2xl">
-					{event.title}
-				</h2>
-			</div>
+							<div class="flex w-full flex-col gap-1">
+							<div class="shrink-0 opacity-70 leading-none text-[clamp(1rem,3vw,1.5rem)]">
+								<span class="mr-auto md:mr-2">
+									{event.displayDate}
+								</span>
+			
+								{#if event.displayTime}
+									<span class="ml-1">
+										{event.displayTime}
+									</span>
+								{/if}
+							</div>
+				                    <!-- title -->
+				                    <div class="text-[clamp(1rem,3vw,1.5rem)] font-medium leading-none">
+				                        {event.title}
+				                    </div>			</div>
 
 			<!-- diagonal pixel row as bottom border -->
 			<div

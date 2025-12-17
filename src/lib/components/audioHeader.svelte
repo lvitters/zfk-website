@@ -371,7 +371,7 @@
 					: 'width 0.1s linear'};">
 				<div
 					class="h-full w-screen"
-					style="background-image: linear-gradient(270deg, #ff00ff, #ffc000, #ccff00, #00ffff, #0080ff, #8000ff, #ff00ff); background-size: 100% 100%; animation: var(--animate-rainbow); mask-image: linear-gradient(to top, black, transparent); -webkit-mask-image: linear-gradient(to top, black, transparent);">
+					style="background-image: linear-gradient(270deg, #ff00ff, #ffc000, #ccff00, #00ffff, #0080ff, #8000ff, #ff00ff, #ffc000, #ccff00, #00ffff, #0080ff, #8000ff, #ff00ff, #ffc000, #ccff00, #00ffff, #0080ff, #8000ff, #ff00ff, #ffc000, #ccff00, #00ffff, #0080ff, #8000ff, #ff00ff); background-size: 400% 100%; animation: var(--animate-rainbow); animation-play-state: {$isPlaying ? 'running' : 'paused'}; mask-image: linear-gradient(to top, black, transparent); -webkit-mask-image: linear-gradient(to top, black, transparent);">
 				</div>
 			</div>
 		</div>
