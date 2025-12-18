@@ -104,7 +104,7 @@
 	<!-- preview row for event list -->
 	<div class="flex w-full justify-start">
 		<button
-			class="relative flex w-full cursor-pointer flex-col overflow-hidden p-4 text-left duration-100 focus:outline-none {expandedEventId ===
+			class="relative flex w-full cursor-pointer flex-col overflow-hidden p-4 text-left duration-100 focus:outline-none md:px-6 {expandedEventId ===
 			event.id
 				? 'bg-[var(--text-color)] text-[var(--bg-color)]'
 				: 'hover:bg-[var(--text-color)] hover:text-[var(--bg-color)]'}"
@@ -112,26 +112,27 @@
 			onmouseenter={() => (isEntryHovered[index] = true)}
 			onmouseleave={() => (isEntryHovered[index] = false)}>
 			<!-- content -->
-							<div class="flex w-full flex-col gap-1">
-							<div class="shrink-0 opacity-70 leading-none text-[clamp(1rem,3vw,1.5rem)]">
-								<span class="mr-auto md:mr-2">
-									{event.displayDate}
-								</span>
-			
-								{#if event.displayTime}
-									<span class="ml-1">
-										{event.displayTime}
-									</span>
-								{/if}
-							</div>
-				                    <!-- title -->
-				                    <div class="text-[clamp(1rem,3vw,1.5rem)] font-medium leading-none">
-				                        {event.title}
-				                    </div>			</div>
+			<div class="flex w-full flex-col gap-1">
+				<div class="shrink-0 text-[clamp(1rem,3vw,1.5rem)] leading-none opacity-70">
+					<span class="mr-auto md:mr-2">
+						{event.displayDate}
+					</span>
+
+					{#if event.displayTime}
+						<span class="ml-1">
+							{event.displayTime}
+						</span>
+					{/if}
+				</div>
+				<!-- title -->
+				<div class="text-[clamp(1rem,3vw,1.5rem)] leading-none font-medium">
+					{event.title}
+				</div>
+			</div>
 
 			<!-- diagonal pixel row as bottom border -->
 			<div
-				class="absolute bottom-0 left-0 right-0 h-[12px] overflow-hidden"
+				class="absolute right-0 bottom-0 left-0 h-[12px] overflow-hidden"
 				style="mask-image: linear-gradient(to top, black, transparent); -webkit-mask-image: linear-gradient(to top, black, transparent);">
 				{#if event.thumbnailUrl}
 					<DiagonalStrip src={event.thumbnailUrl} class="h-full w-full object-fill" />
@@ -143,7 +144,7 @@
 
 {#snippet expandedEventContent(event: ProgrammEvent)}
 	<!-- expanded details view for an event -->
-	<div class="expanded-event-container flex w-full flex-col gap-6 p-4" transition:slide>
+	<div class="expanded-event-container flex w-full flex-col gap-6 p-4 md:px-6" transition:slide>
 		<!-- event text -->
 		<div class="kirby-content w-full text-base leading-relaxed md:text-lg">
 			<!-- eslint-disable-next-line svelte/no-at-html-tags -->
@@ -154,7 +155,7 @@
 
 <div class="flex w-full flex-col bg-[var(--bg-color)]">
 	<!-- year select row -->
-	<div class="w-full border-b-2 border-[var(--text-color)] p-4">
+	<div class="w-full border-b-2 border-[var(--text-color)] p-4 md:px-6">
 		<YearSelect {years} year={selectedYear} {selectYear} />
 	</div>
 

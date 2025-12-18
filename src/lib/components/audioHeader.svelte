@@ -52,7 +52,7 @@
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		scWidget.bind(window.SC.Widget.Events.PLAY_PROGRESS, (data: any) => {
-			if (!isDragging) {
+			if (!isDragging && $currentTrack?.isExternal) {
 				currentTime = data.currentPosition / 1000; // ms to s
 			}
 		});
@@ -327,19 +327,19 @@
 			<!-- track info (time + title) to the right of the logo -->
 			<div class="pointer-events-none relative z-20 ml-4 flex flex-1 flex-col items-start gap-1 pt-2">
 				<!-- time -->
-				<div class="shrink-0 text-[clamp(1rem,3vw,1.5rem)] tabular-nums leading-none opacity-70">
+				<div class="shrink-0 text-[clamp(1rem,3vw,1.5rem)] leading-none tabular-nums opacity-70">
 					{formatTime(currentTime)} / {formatTime(duration)}
 				</div>
 
 				<!-- title -->
-				<div class="text-[clamp(1rem,3vw,1.5rem)] font-medium leading-none">
+				<div class="text-[clamp(1rem,3vw,1.5rem)] leading-none font-medium">
 					{$currentTrack.title}
 				</div>
 			</div>
 		{:else}
 			<div class="pointer-events-none relative z-20 ml-4 flex flex-1 items-center">
 				<!-- title, centered vertically -->
-				<div class="text-[clamp(1rem,3vw,1.5rem)] font-medium leading-none">
+				<div class="text-[clamp(1rem,3vw,1.5rem)] leading-none font-medium">
 					Zentrum für <br />
 					Kollektivkultur e.V.
 				</div>
@@ -348,7 +348,7 @@
 
 		<!-- seekable progress bar area -->
 		<div
-			class="absolute bottom-0 left-0 right-0 h-[12px] cursor-pointer"
+			class="absolute right-0 bottom-0 left-0 h-[12px] cursor-pointer"
 			bind:this={progressBar}
 			role="button"
 			tabindex="0"

@@ -74,23 +74,23 @@ textarea {
 
 /* kirby content */
 @layer components {
-	/* Reset margins to handle spacing contextually */
+	/* reset margins to handle spacing contextually */
 	.kirby-content > * {
 		@apply mt-0 mb-0;
 	}
 
-	/* Standard Flow: Default spacing between stacked elements */
+	/* standard flow: default spacing between stacked elements */
 	.kirby-content > * + * {
 		@apply mt-6 md:mt-8;
 	}
 
-	/* HEADINGS */
+	/* headings */
 	.kirby-content h1 {
 		@apply font-bold;
 		font-size: clamp(1.5rem, 5vw, 3rem);
 		font-weight: 900;
 	}
-	/* If H1 follows something (rare), give it extra space */
+	/* if H1 follows something (rare), give it extra space */
 	.kirby-content > * + h1 {
 		@apply mt-12 md:mt-16;
 	}
@@ -122,7 +122,7 @@ textarea {
 		@apply mt-8 md:mt-10;
 	}
 
-	/* TEXT */
+	/* text */
 	.kirby-content p {
 		@apply min-h-[1em];
 		font-size: clamp(1rem, 1vw + 0.5rem, 1.25rem);
@@ -132,7 +132,7 @@ textarea {
 		opacity: 0.8;
 	}
 
-	/* Contextual: Tighten text following a heading (Grouping) */
+	/* contextual: tighten text following a heading (grouping) */
 	.kirby-content h1 + p,
 	.kirby-content h2 + p,
 	.kirby-content h3 + p,
@@ -140,7 +140,7 @@ textarea {
 		@apply mt-2 md:mt-3;
 	}
 
-	/* MEDIA */
+	/* media */
 	.kirby-content figure {
 		@apply my-6;
 	}
@@ -156,22 +156,28 @@ textarea {
 		@apply break-all underline hover:opacity-80;
 	}
 
+	/* logic breakers */
+	/* use '---' in markdown or the 'Spacer' block to create a break that resets spacing */
+	.kirby-content hr {
+		@apply h-0 border-0 opacity-0;
+	}
+
 	.kirby-content {
 		text-shadow: none;
 		user-select: text;
 	}
 
-	/* First element should have no top margin usually */
+	/* first element should have no top margin usually */
 	.kirby-content > :first-child {
 		margin-top: 0;
 	}
 
-	/* SLIDE GALLERY */
+	/* slide gallery */
 	.kirby-content .gallery-wrapper {
 		@apply relative w-full bg-black md:w-1/2 lg:w-1/3 xl:w-1/4;
 	}
 
-	/* TRACK */
+	/* track */
 	.kirby-content .gallery-track {
 		@apply flex snap-x snap-mandatory overflow-x-auto scroll-smooth;
 		scrollbar-width: none;
@@ -180,30 +186,30 @@ textarea {
 		display: none;
 	}
 
-	/* SLIDE */
+	/* slide */
 	.kirby-content .gallery-slide {
 		@apply flex w-full flex-none snap-center items-center justify-center;
 	}
 
-	/* IMAGE */
+	/* image */
 	.kirby-content .gallery-wrapper img {
 		@apply m-0 block h-auto w-full object-cover;
 		filter: drop-shadow(0 0 0 var(--text-color));
 	}
 
-	/* BUTTON GRID CONTAINER */
+	/* button grid container */
 	.kirby-content .gallery-btn.grid {
 		@apply grid grid-cols-2;
 	}
 
-	/* GALLERY BUTTONS (individual) */
+	/* gallery buttons (individual) */
 	.kirby-content button.gallery-btn {
 		@apply flex cursor-pointer items-center
            justify-center border-2 border-[var(--text-color)]
            bg-[var(--bg-color)] text-4xl text-[var(--text-color)] transition-colors duration-100 ease-in-out;
 	}
 
-	/* Button Hover State */
+	/* button hover state */
 	.kirby-content button.gallery-btn:hover {
 		@apply bg-[var(--text-color)] text-[var(--bg-color)];
 	}

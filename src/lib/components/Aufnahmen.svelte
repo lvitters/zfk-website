@@ -57,7 +57,7 @@
 <!-- display files list container -->
 <div class="flex w-full flex-col bg-[var(--bg-color)]">
 	<!-- year select header -->
-	<div class="w-full border-b-2 border-[var(--text-color)] p-4">
+	<div class="w-full border-b-2 border-[var(--text-color)] p-4 md:px-6">
 		<YearSelect {years} year={selectedYear} {selectYear} />
 	</div>
 
@@ -67,7 +67,7 @@
 				{@const isActive = file.id === $currentTrack?.id}
 				<!-- individual file row -->
 				<button
-					class="group relative flex w-full cursor-pointer flex-col gap-1 border-b-2 border-[var(--text-color)] p-4 text-left duration-100 last:border-b-0 {isActive
+					class="group relative flex w-full cursor-pointer flex-col gap-1 border-b-2 border-[var(--text-color)] p-4 text-left duration-100 last:border-b-0 md:px-6 {isActive
 						? 'bg-[var(--text-color)] text-[var(--bg-color)]'
 						: 'hover:bg-[var(--text-color)] hover:text-[var(--bg-color)]'}"
 					onclick={() => {
@@ -78,7 +78,8 @@
 						}
 					}}>
 					<!-- date row with optional SoundCloud icon -->
-					<div class="flex h-6 w-full shrink-0 items-center text-[clamp(1rem,3vw,1.5rem)] leading-none opacity-70">
+					<div
+						class="flex h-6 w-full shrink-0 items-center text-[clamp(1rem,3vw,1.5rem)] leading-none opacity-70">
 						<span class="mr-auto md:mr-2">
 							{file.sortDate.split("-")[2]}.{file.sortDate.split("-")[1]}.
 						</span>
@@ -110,7 +111,7 @@
 						{/if}
 					</div>
 					<!-- title -->
-					<div class="text-[clamp(1rem,3vw,1.5rem)] font-medium leading-none">
+					<div class="text-[clamp(1rem,3vw,1.5rem)] leading-none font-medium">
 						{file.title}
 					</div>
 				</button>
